@@ -1,0 +1,21 @@
+﻿@page "/nova-transacao"
+
+@inject NavigationManager UriHelper
+@inject ITransacaoService TransacaoService
+
+<h1>Nova Transação</h1>
+
+<input form="Data" @bind="@transacao.Data" />
+<input form="Descricao" @bind="@transacao.Descricao" />
+<input form="Valor" @bind="@transacao.Valor" />
+<button class="btn btn-primary" @onclick="Nova">Salvar</button>
+
+@code {
+    Transacao transacao = new();
+
+    private async Task Nova()
+    {
+        await TransacaoService.NovaTransacao(transacao);
+        UriHelper.NavigateTo("/");
+    }
+}
