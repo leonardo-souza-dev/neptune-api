@@ -1,4 +1,4 @@
-﻿    using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Neptune.Api.Services;
@@ -11,14 +11,10 @@ namespace Neptune.Api.Controllers
     [Route("api/[controller]")]
     public class TransacaoController : ControllerBase
     {
-        
-        private readonly ILogger<TransacaoController> Logger;
         private readonly ITransacaoRepository TransacaoRepository;
 
-        public TransacaoController(ILogger<TransacaoController> logger,
-                                   ITransacaoRepository transacaoRepository)
+        public TransacaoController(ITransacaoRepository transacaoRepository)
         {
-            Logger = logger;
             TransacaoRepository = transacaoRepository;
         }
 

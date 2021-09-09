@@ -14,7 +14,7 @@
     <br />
     <EditForm Model="@novaTransacao" >
         <InputDate @bind-Value="@novaTransacao.Data" @bind-Value:format="dd/MM/yyyy" />
-        <input form="Descricao" @bind="@novaTransacao.Descricao" />
+        <input form="Descricao" @bind="@novaTransacao.Descricao" placeholder="Descrição da transação" />
         <input form="Valor" @bind="@novaTransacao.Valor" />
         <button class="btn btn-primary" @onclick="Nova">Salvar</button>
     </EditForm>
