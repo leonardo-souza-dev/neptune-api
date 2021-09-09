@@ -11,57 +11,56 @@
 
 @if (novaTransacaoVisivel)
 {
-    <br />
-    <EditForm Model="@novaTransacao" >
+    <EditForm Model="@novaTransacao" OnValidSubmit="@Nova">
         <InputDate @bind-Value="@novaTransacao.Data" @bind-Value:format="dd/MM/yyyy" />
-        <input form="Descricao" @bind="@novaTransacao.Descricao" placeholder="Descrição da transação" />
-        <input form="Valor" @bind="@novaTransacao.Valor" />
-        <button class="btn btn-primary" @onclick="Nova">Salvar</button>
+        <InputText @bind-Value="@novaTransacao.Descricao" placeholder="Descrição da transação" />
+        <InputNumber @bind-Value="@novaTransacao.Valor" />
+        <button class="btn btn-primary" type="submit">Salvar</button>
     </EditForm>
-        }
+}
 
-        @if (Transacoes == null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Descricao</th>
-                        <th>Valor</th>
-                        <th>Editar</th>
-                        <th>Id</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var transacao in Transacoes)
-                    {
-                        <TransacaoComp transacao="@transacao" />
-                    }
-                </tbody>
-            </table>
-        }
+@if (Transacoes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Descricao</th>
+                <th>Valor</th>
+                <th>Editar</th>
+                <th>Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transacao in Transacoes)
+            {
+                <TransacaoComp transacao="@transacao" />
+            }
+        </tbody>
+    </table>
+}
 
-        @code {
-            IList<Transacao> Transacoes { get; set; }
-            Transacao novaTransacao = new();
-            bool novaTransacaoVisivel = false;
+@code {
+    IList<Transacao> Transacoes { get; set; }
+    Transacao novaTransacao = new();
+    bool novaTransacaoVisivel = false;
 
     protected override async Task OnInitializedAsync() => Transacoes = await TransacaoService.ObterTransacoes();
 
-        private void NovaTransacao()
-        {
-            novaTransacao = new();
-            novaTransacaoVisivel = true;
-        }
+    private void NovaTransacao()
+    {
+        novaTransacao = new();
+        novaTransacaoVisivel = true;
+    }
 
-        private async Task Nova()
-        {
-            var novaTransacaoPersistida = await TransacaoService.NovaTransacao(novaTransacao);
-            Transacoes.Add(novaTransacaoPersistida);
-            novaTransacaoVisivel = false;
-        }
-        }
+    private async Task Nova()
+    {
+        var novaTransacaoPersistida = await TransacaoService.NovaTransacao(novaTransacao);
+        Transacoes.Add(novaTransacaoPersistida);
+        novaTransacaoVisivel = false;
+    }
+}
