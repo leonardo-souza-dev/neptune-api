@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Neptune.Models
 {
-    public class Transacao //: INotifyCompletion
+    public class Transacao 
     {
         public byte IdView { get; set; }
         public DateTime Data { get; set; } = DateTime.Now;
@@ -24,10 +24,5 @@ namespace Neptune.Models
             Descricao = descricao;
             Valor = valor;
         }
-
-        //public static TaskAwaiter GetAwaiter(this TimeSpan timeSpan)
-        //{
-        //    return TaskEx.Delay(timeSpan).GetAwaiter();
-        //}
     }
 }

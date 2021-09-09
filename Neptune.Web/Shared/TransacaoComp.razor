@@ -1,7 +1,7 @@
 ﻿@using Neptune.Models
 
 <tr>
-    <td>@transacao.Data.ToShortDateString()</td>
+    <td>@transacao.Data.ToString("dd-MM-yyyy")</td>
     <td>@transacao.Descricao</td>
     <td>@transacao.Valor</td>
     <td><a href="/editar-transacao/@transacao.Id">Editar</a></td>
