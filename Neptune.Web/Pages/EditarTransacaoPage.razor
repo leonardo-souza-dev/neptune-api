@@ -7,10 +7,12 @@
 
 <h1>Editar Transação</h1>
 
-<input form="Data" @bind="@transacao.Data" />
-<input form="Descricao" @bind="@transacao.Descricao" />
-<input form="Valor" @bind="@transacao.Valor" />
-<button class="btn btn-primary" @onclick="Editar">Salvar</button>
+<EditForm Model="@transacao" OnValidSubmit="@Editar">
+    <InputDate @bind-Value="@transacao.Data" />
+    <InputText @bind-Value="@transacao.Descricao" />
+    <InputNumber @bind-Value="@transacao.Valor" />
+    <button class="btn btn-primary" type="submit">Salvar</button>
+</EditForm>
 
 @code {
     [Parameter]

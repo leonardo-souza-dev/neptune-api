@@ -12,7 +12,7 @@
 @if (novaTransacaoVisivel)
 {
     <EditForm Model="@novaTransacao" OnValidSubmit="@Nova">
-        <InputDate @bind-Value="@novaTransacao.Data" @bind-Value:format="dd/MM/yyyy" />
+        <InputDate @bind-Value="@novaTransacao.Data" />
         <InputText @bind-Value="@novaTransacao.Descricao" placeholder="Descrição da transação" />
         <InputNumber @bind-Value="@novaTransacao.Valor" />
         <button class="btn btn-primary" type="submit">Salvar</button>
@@ -38,7 +38,7 @@ else
         <tbody>
             @foreach (var transacao in Transacoes)
             {
-                <TransacaoComp transacao="@transacao" />
+                <TransacaoListComp transacao="@transacao" />
             }
         </tbody>
     </table>
