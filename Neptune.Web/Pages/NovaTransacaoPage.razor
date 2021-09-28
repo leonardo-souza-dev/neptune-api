@@ -5,17 +5,18 @@
 
 <h1>Nova Transação</h1>
 
-<input form="Data" @bind="@transacao.Data" />
-<input form="Descricao" @bind="@transacao.Descricao" />
-<input form="Valor" @bind="@transacao.Valor" />
+<input form="Data" @bind="@novaTransacaoViewModel.Data" />
+<input form="Descricao" @bind="@novaTransacaoViewModel.Descricao" />
+<input form="Valor" @bind="@novaTransacaoViewModel.Valor" />
+<input type="hidden" value="@novaTransacaoViewModel.ContaId" />
 <button class="btn btn-primary" @onclick="Nova">Salvar</button>
 
 @code {
-    Transacao transacao = new();
+    NovaTransacaoViewModel novaTransacaoViewModel = new();
 
     private async Task Nova()
     {
-        await TransacaoService.NovaTransacao(transacao);
+        await TransacaoService.NovaTransacao(novaTransacaoViewModel);
         UriHelper.NavigateTo("/");
     }
 }

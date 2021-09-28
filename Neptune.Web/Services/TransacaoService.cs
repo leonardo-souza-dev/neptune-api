@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Linq;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Neptune.Models;
+using Neptune.Web.ViewModel;
+using System;
 
 namespace Neptune.Web.Services
 {
@@ -15,9 +18,14 @@ namespace Neptune.Web.Services
             HttpClient = httpClient;
         }
 
-        public async Task<IList<Transacao>> ObterTransacoes()
+        public async Task<TransacoesViewModel> ObterTransacoesViewModel(DateTime data)
         {
-            return await HttpClient.GetFromJsonAsync<IList<Transacao>>("/api/transacao");
+            var transacoesModel = await HttpClient.GetFromJsonAsync<List<Transacao>>("/api/transacao");
+            var transacoesModelMes = transacoesModel.Where(x => x.Data.Month == data.Month);
+
+            var transacoesViewModel = new TransacoesViewModel(transacoesModelMes);
+
+            return transacoesViewModel;
         }
 
         public async Task<Transacao> ObterTransacao(int id)
@@ -31,10 +39,20 @@ namespace Neptune.Web.Services
             return await response.Content.ReadFromJsonAsync<Transacao>();
         }
 
-        public async Task<Transacao> NovaTransacao(Transacao transacao)
+        public async Task<TransacaoViewModel> NovaTransacao(NovaTransacaoViewModel novaTransacaoViewModel)
         {
+            var transacao = new Transacao
+            {
+                Data = novaTransacaoViewModel.Data,
+                Descricao = novaTransacaoViewModel.Descricao,
+                Valor = novaTransacaoViewModel.Valor,
+                ContaId = novaTransacaoViewModel.ContaId
+            };
+
             var response = await HttpClient.PostAsJsonAsync("/api/transacao", transacao);
-            return await response.Content.ReadFromJsonAsync<Transacao>();
+            var transacaoModel = await response.Content.ReadFromJsonAsync<Transacao>();
+
+            return new TransacaoViewModel(transacaoModel);
         }
     }
 }

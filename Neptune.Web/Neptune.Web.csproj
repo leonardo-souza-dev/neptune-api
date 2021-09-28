@@ -11,8 +11,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Services\" />
+    <None Remove="ViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="ViewModel\" />
   </ItemGroup>
 </Project>

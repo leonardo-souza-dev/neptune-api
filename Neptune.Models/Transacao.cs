@@ -16,19 +16,27 @@ namespace Neptune.Models
         [Required]
         public decimal Valor { get; set; }
 
-        public byte IdView { get; set; }
+        public int ContaId { get; set; }
 
         public Transacao()
         {
         }
 
-        public Transacao(int id, byte idView, DateTime data, string descricao, decimal valor)
+        public Transacao(int id, DateTime data, string descricao, decimal valor, int contaId)
         {
             Id = id;
-            IdView = idView;
             Data = data;
             Descricao = descricao;
             Valor = valor;
+            ContaId = contaId;
+        }
+
+        public Transacao(DateTime data, string descricao, decimal valor, int contaId)
+        {
+            Data = data;
+            Descricao = descricao;
+            Valor = valor;
+            ContaId = contaId;
         }
     }
 }

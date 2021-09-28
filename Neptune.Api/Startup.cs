@@ -40,6 +40,7 @@ namespace Neptune.Api
             });
 
             services.AddSingleton<ITransacaoRepository, TransacaoRepository>();
+            services.AddSingleton<IContaRepository, ContaRepository>();
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();

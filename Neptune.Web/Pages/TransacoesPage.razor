@@ -11,15 +11,16 @@
 
 @if (novaTransacaoVisivel)
 {
-    <EditForm Model="@novaTransacao" OnValidSubmit="@Nova">
-        <InputDate @bind-Value="@novaTransacao.Data" />
-        <InputText @bind-Value="@novaTransacao.Descricao" placeholder="Descrição da transação" />
-        <InputNumber @bind-Value="@novaTransacao.Valor" />
-        <button class="btn btn-primary" type="submit">Salvar</button>
-    </EditForm>
+<EditForm Model="@novaTransacaoViewModel" OnValidSubmit="@Nova">
+    <InputDate @bind-Value="@novaTransacaoViewModel.Data"  />
+    <InputText @bind-Value="@novaTransacaoViewModel.Descricao" placeholder="Descrição da transação" />
+    <InputNumber @bind-Value="@novaTransacaoViewModel.Valor" placeholder="Valor" />
+    <InputNumber @bind-Value="@novaTransacaoViewModel.ContaId" placeholder="ContaId" />
+    <button class="btn btn-primary" type="submit">Salvar</button>
+</EditForm>
 }
 
-@if (Transacoes == null)
+@if (_transacoesViewModel == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -28,39 +29,43 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Data</th>
                 <th>Descricao</th>
                 <th>Valor</th>
                 <th>Editar</th>
-                <th>Id</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var transacao in Transacoes)
+            <tr>
+                <th colspan="3" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior - @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
+            </tr>
+            @foreach (var dia in _transacoesViewModel.Dias)
             {
-                <TransacaoListComp transacao="@transacao" />
+                <TransacoesDiaComp dia="@dia" />
             }
         </tbody>
     </table>
 }
 
 @code {
-    IList<Transacao> Transacoes { get; set; }
-    Transacao novaTransacao = new();
+    TransacoesViewModel _transacoesViewModel { get; set; }
+    NovaTransacaoViewModel novaTransacaoViewModel = new();
     bool novaTransacaoVisivel = false;
 
-    protected override async Task OnInitializedAsync() => Transacoes = await TransacaoService.ObterTransacoes();
+    protected override async Task OnInitializedAsync()
+    {
+        _transacoesViewModel = await TransacaoService.ObterTransacoesViewModel(DateTime.Now);
+    }
 
     private void NovaTransacao()
     {
-        novaTransacao = new();
+        novaTransacaoViewModel = new();
         novaTransacaoVisivel = true;
     }
 
     private async Task Nova()
     {
-        var novaTransacaoPersistida = await TransacaoService.NovaTransacao(novaTransacao);
-        Transacoes.Add(novaTransacaoPersistida);
+        var novaTransacaoPersistida = await TransacaoService.NovaTransacao(novaTransacaoViewModel);
+        _transacoesViewModel.AdicionarTransacao(novaTransacaoPersistida);
         novaTransacaoVisivel = false;
     }
 }

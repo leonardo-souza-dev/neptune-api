@@ -8,12 +8,14 @@ namespace Neptune.Api.Services
 {
     public class TransacaoRepository : ITransacaoRepository
     {
-        private readonly List<Transacao> Transacoes = new()
+        private readonly List<Transacao> Transacoes = new();
+
+        public TransacaoRepository()
         {
-            new Transacao(1, 1, DateTime.Now, "Pão1", new Random().Next(1, 100)),
-            new Transacao(2, 2, DateTime.Now, "Café2", new Random().Next(1, 100)),
-            new Transacao(3, 3, DateTime.Now, "Manteiga3", new Random().Next(1, 100))
-        };
+            Transacoes.Add(new Transacao(1, DateTime.Now, "Pão1", new Random().Next(1, 100), 1));
+            Transacoes.Add(new Transacao(2, DateTime.Now, "Café2", new Random().Next(1, 100), 1));
+            Transacoes.Add(new Transacao(3, DateTime.Now.AddDays(-1), "Manteiga3", new Random().Next(1, 100), 1));
+        }
 
         public async Task<List<Transacao>> ObterTodas()
         {
@@ -27,25 +29,25 @@ namespace Neptune.Api.Services
 
         public async Task<Transacao> Criar(Transacao transacao)
         {
-            var novaTransacao = new Transacao(GetNextId(),
-                                         transacao.IdView,
+            var novaEntidade = new Transacao(GetNextId(),
                                          transacao.Data,
                                          transacao.Descricao,
-                                         transacao.Valor);
+                                         transacao.Valor,
+                                         transacao.ContaId);
 
-            Transacoes.Add(novaTransacao);
+            Transacoes.Add(novaEntidade);
 
-            return novaTransacao;
+            return novaEntidade;
         }
 
         public async Task<Transacao> Atualizar(Transacao transacao)
         {
             var transacaoEditada = Transacoes.FirstOrDefault(x => x.Id == transacao.Id);
 
-            transacaoEditada.IdView = transacao.IdView;
             transacaoEditada.Data = transacao.Data;
             transacaoEditada.Descricao = transacao.Descricao;
             transacaoEditada.Valor = transacao.Valor;
+            transacaoEditada.ContaId = transacao.ContaId;
 
             return transacaoEditada;
         }
