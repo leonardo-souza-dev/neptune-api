@@ -10,7 +10,7 @@ namespace Neptune.Api.Services
     {
         private readonly List<Conta> Contas = new()
         {
-            new Conta(1, "NuPoup", 6479.82M)
+            new Conta(1, "NuPoup", 100M)
         };
 
         public async Task<List<Conta>> ObterTodas()

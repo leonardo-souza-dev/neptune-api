@@ -12,9 +12,10 @@ namespace Neptune.Api.Services
 
         public TransacaoRepository()
         {
-            Transacoes.Add(new Transacao(1, DateTime.Now, "Pão1", new Random().Next(1, 100), 1));
-            Transacoes.Add(new Transacao(2, DateTime.Now, "Café2", new Random().Next(1, 100), 1));
-            Transacoes.Add(new Transacao(3, DateTime.Now.AddDays(-1), "Manteiga3", new Random().Next(1, 100), 1));
+            Transacoes.Add(new Transacao(1, DateTime.Now.AddMonths(-1), "Pão", 1.2M, 1));
+            Transacoes.Add(new Transacao(2, DateTime.Now, "Café", 4.5M, 1));
+            Transacoes.Add(new Transacao(2, DateTime.Now, "Bolacha", 2.2M, 1));
+            Transacoes.Add(new Transacao(3, DateTime.Now.AddDays(1), "Manteiga", 10.2M, 1));
         }
 
         public async Task<List<Transacao>> ObterTodas()

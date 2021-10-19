@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptune.Api", "Neptune.Api\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptune.Web", "Neptune.Web\Neptune.Web.csproj", "{B17C187E-DCCC-43EE-95AC-484C2BDBDD56}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Neptune.Models", "Neptune.Models\Neptune.Models.csproj", "{6435ECC1-06B4-4A83-BAAB-5ECA20322EFA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptune.Models", "Neptune.Models\Neptune.Models.csproj", "{6435ECC1-06B4-4A83-BAAB-5ECA20322EFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
