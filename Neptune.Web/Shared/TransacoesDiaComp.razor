@@ -1,16 +1,17 @@
 ﻿<tr>
-    <td colspan="3">@this.dia.Data.ToString("dd/MM/yyyy")</td>
+    <td colspan="4">@dia.Data.ToString("dd/MM/yyyy")</td>
 </tr>
 @foreach(TransacaoViewModel transacao in dia.Transacoes)
 {
     <tr>
+        <td>@transacao.Id</td>
         <td>@transacao.Descricao</td>
         <td>@transacao.Valor</td>
         <td><a href="/editar-transacao/@transacao.Id">Editar</a></td>
     </tr>
 }
 <tr>
-    <td colspan="3" style="text-align: right; height: 80px;">Saldo do dia: @this.dia.ObterSaldoDoDia()</td>
+    <td colspan="4" style="text-align: right; height: 80px;">Saldo do dia: @dia.ObterSaldoDoDia()</td>
 </tr>
 
 @code {
