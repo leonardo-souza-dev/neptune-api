@@ -62,7 +62,23 @@ namespace Neptune.Web.ViewModel
                 x.Data.Month == transacaoViewModel.Data.Month &&
                 x.Data.Year == transacaoViewModel.Data.Year));
 
-            dia.AdicionarTransacao(transacaoViewModel);
+            if (dia == null)
+            {
+                var diaAnterior = Dias.FirstOrDefault(x => (x.Data.Day < transacaoViewModel.Data.AddDays(-1).Day &&
+                                                            x.Data.Month == transacaoViewModel.Data.Month &&
+                                                            x.Data.Year == transacaoViewModel.Data.Year));
+
+                var saldoDoDiaAnterior = diaAnterior.ObterSaldoDoDia();
+                var transacoes = new List<Transacao>() { new Transacao(transacaoViewModel.Id, transacaoViewModel.Data, transacaoViewModel.Descricao, transacaoViewModel.Valor, transacaoViewModel.ContaId) };
+
+                var novoDia = new DiaViewModel(transacaoViewModel.Data, transacoes, saldoDoDiaAnterior);
+
+                Dias.Add(novoDia);
+
+                Dias.Sort((x, y) => x.Data.CompareTo(y.Data));
+            }
+            else
+                dia.AdicionarTransacao(transacaoViewModel);
         }
     }
 

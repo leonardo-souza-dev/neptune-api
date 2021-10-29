@@ -12,10 +12,10 @@ namespace Neptune.Api.Services
 
         public TransacaoRepository()
         {
-            _transacoes.Add(new Transacao(1, DateTime.Now.AddMonths(-1), "Pão", 1.2M, 1));
-            _transacoes.Add(new Transacao(2, DateTime.Now, "Café", 4.5M, 1));
-            _transacoes.Add(new Transacao(3, DateTime.Now, "Bolacha", 2.2M, 1));
-            _transacoes.Add(new Transacao(4, DateTime.Now.AddDays(1), "Manteiga", 10.2M, 1));
+            _transacoes.Add(new Transacao(1, DateTime.Now.AddMonths(-1), "Pão", 1M, 1));
+            _transacoes.Add(new Transacao(2, DateTime.Now.AddDays(-7), "Café", 4M, 1));
+            _transacoes.Add(new Transacao(3, DateTime.Now, "Bolacha", 2M, 1));
+            _transacoes.Add(new Transacao(4, DateTime.Now.AddDays(1), "Manteiga", 10M, 1));
         }
 
         public async Task<List<Transacao>> ObterTodas()
