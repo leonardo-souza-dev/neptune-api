@@ -6,7 +6,7 @@ using Neptune.Models;
 
 namespace Neptune.Web.ViewModel
 {
-    public class TransacoesViewModel
+    public class TransacoesMesViewModel
     {
         public decimal SaldoUltimoDiaMesAnterior { get; private set; }
         public string UltimoDiaMesAnterior { get { return _ultimoDiaMesAnterior.ToString("dd/MM/yyyy"); } }
@@ -22,7 +22,7 @@ namespace Neptune.Web.ViewModel
         public int ObterAnoDoMesAnterior() => new DateTime(Ano, Mes, 1).AddMonths(-1).Year;
         public int ObterAnoDoMesSeguinte() => new DateTime(Ano, Mes, 1).AddMonths(1).Year;
 
-        public TransacoesViewModel(int ano, int mes, IEnumerable<Transacao> transacoesModel, decimal saldoUltimoDiaMesAnterior)
+        public TransacoesMesViewModel(int ano, int mes, IEnumerable<Transacao> transacoesModel, decimal saldoUltimoDiaMesAnterior)
         {
             Ano = ano;
             Mes = mes;
@@ -73,12 +73,22 @@ namespace Neptune.Web.ViewModel
 
                 var novoDia = new DiaViewModel(transacaoViewModel.Data, transacoes, saldoDoDiaAnterior);
 
-                Dias.Add(novoDia);
-
-                Dias.Sort((x, y) => x.Data.CompareTo(y.Data));
+                Dias.Add(novoDia);                
             }
             else
                 dia.AdicionarTransacao(transacaoViewModel);
+
+            Dias.Sort((x, y) => x.Data.CompareTo(y.Data));
+
+            RecalcularSaldoDosDias();
+        }
+
+        private void RecalcularSaldoDosDias()
+        {
+            foreach (var dia in Dias)
+            {
+                //TODO: implementar
+            }
         }
     }
 

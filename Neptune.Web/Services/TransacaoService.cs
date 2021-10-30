@@ -18,13 +18,13 @@ namespace Neptune.Web.Services
             HttpClient = httpClient;
         }
 
-        public async Task<TransacoesViewModel> ObterTransacoesViewModel(int mes, int ano, int contaId)
+        public async Task<TransacoesMesViewModel> ObterTransacoesMesViewModel(int mes, int ano, int contaId)
         {
             var transacoes = await ObterTransacoesSort();            
             var transacoesModelMes = transacoes.Where(x => x.Data.Month == mes);
             var saldoMesAnterior = await ObterSaldoMesAnterior(mes, ano, contaId, transacoes);
 
-            var transacoesViewModel = new TransacoesViewModel(ano, mes, transacoesModelMes, saldoMesAnterior);
+            var transacoesViewModel = new TransacoesMesViewModel(ano, mes, transacoesModelMes, saldoMesAnterior);
 
             return transacoesViewModel;
         }

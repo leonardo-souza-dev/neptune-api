@@ -48,3 +48,8 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.transacoes tr {
+    line-height: 2px;
+    font-size: 11px;
+}

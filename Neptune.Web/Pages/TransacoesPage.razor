@@ -34,18 +34,19 @@
 }
 else
 {
-    <table class="table">
+    <table class="table transacoes">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Descricao</th>
+                <th>Conta</th>
                 <th>Valor</th>
                 <th>Editar</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <th colspan="4" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior: @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
+                <th colspan="5" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior: @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
             </tr>
             @foreach (var dia in _transacoesViewModel.Dias)
             {
@@ -63,7 +64,7 @@ else
     [Parameter]
     public int Mes { get; set; }
 
-    TransacoesViewModel _transacoesViewModel { get; set; }
+    TransacoesMesViewModel _transacoesViewModel { get; set; }
     NovaTransacaoViewModel _novaTransacaoViewModel = new();
     bool _novaTransacaoVisivel;
     string NavMesAnterior => $"/{_transacoesViewModel.ObterAnoDoMesAnterior()}/{_transacoesViewModel.ObterMesAnterior()}";
@@ -76,7 +77,7 @@ else
         if (Ano == 0)
             Ano = DateTime.Now.Year;
 
-        _transacoesViewModel = await TransacaoService.ObterTransacoesViewModel(Mes, Ano, 1);
+        _transacoesViewModel = await TransacaoService.ObterTransacoesMesViewModel(Mes, Ano, 1);
     }
 
     protected override async Task OnParametersSetAsync()
