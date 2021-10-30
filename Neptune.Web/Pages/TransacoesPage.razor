@@ -10,7 +10,7 @@
 {
     <div>
         <NavLink href="@NavMesAnterior" target="_self">anterior</NavLink>
-        <span>@_transacoesViewModel.ObterMes()</span>
+        <span>@_transacoesViewModel.Mes</span>
         <NavLink href="@NavMesSeguinte" target="_self">próximo</NavLink>
     </div>
 }
@@ -45,7 +45,7 @@ else
         </thead>
         <tbody>
             <tr>
-                <th colspan="4" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior - @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
+                <th colspan="4" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior: @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
             </tr>
             @foreach (var dia in _transacoesViewModel.Dias)
             {
@@ -76,7 +76,7 @@ else
         if (Ano == 0)
             Ano = DateTime.Now.Year;
 
-        _transacoesViewModel = await TransacaoService.ObterTransacoesViewModel(Mes, Ano);
+        _transacoesViewModel = await TransacaoService.ObterTransacoesViewModel(Mes, Ano, 1);
     }
 
     protected override async Task OnParametersSetAsync()

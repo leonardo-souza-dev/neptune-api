@@ -11,60 +11,22 @@ namespace Neptune.Web.ViewModel
         public decimal SaldoUltimoDiaMesAnterior { get; private set; }
         public string UltimoDiaMesAnterior { get { return _ultimoDiaMesAnterior.ToString("dd/MM/yyyy"); } }
         public List<DiaViewModel> Dias { get; private set; } = new();
+        public int Ano;
+        public int Mes;
 
         private IEnumerable<Transacao> _transacoesModel;
-        private DateTime _ultimoDiaMesAnterior
+        private DateTime _ultimoDiaMesAnterior => new DateTime(Ano, Mes, 1).AddDays(-1);
+
+        public int ObterMesAnterior() => new DateTime(Ano, Mes, 1).AddMonths(-1).Month;
+        public int ObterMesSeguinte() => new DateTime(Ano, Mes, 1).AddMonths(1).Month;
+        public int ObterAnoDoMesAnterior() => new DateTime(Ano, Mes, 1).AddMonths(-1).Year;
+        public int ObterAnoDoMesSeguinte() => new DateTime(Ano, Mes, 1).AddMonths(1).Year;
+
+        public TransacoesViewModel(int ano, int mes, IEnumerable<Transacao> transacoesModel, decimal saldoUltimoDiaMesAnterior)
         {
-            get
-            {
-                var data = _transacoesModel.First().Data;
-                return new DateTime(data.Year, data.Month, 1).AddDays(-1);
-            }
-        }
+            Ano = ano;
+            Mes = mes;
 
-        public int ObterMes()
-        {
-            if (Dias.Any())
-                return Dias.First().Data.Month;
-
-            throw new Exception("ERRO AO OBTER MES");
-        }
-
-        public int ObterMesAnterior()
-        {
-            if (Dias.Any())
-                return Dias.First().Data.AddMonths(-1).Month;
-
-            throw new Exception("ERRO AO OBTER MES");
-        }
-
-        public int ObterMesSeguinte()
-        {
-            if (Dias.Any())
-                return Dias.First().Data.AddMonths(1).Month;
-
-            throw new Exception("ERRO AO OBTER MES");
-        }
-
-        public int ObterAnoDoMesAnterior()
-        {
-            if (Dias.Any())
-                return Dias.First().Data.AddMonths(-1).Year;
-
-            throw new Exception("ERRO AO OBTER ANO");
-        }
-
-        public int ObterAnoDoMesSeguinte()
-        {
-            if (Dias.Any())
-                return Dias.First().Data.AddMonths(1).Year;
-
-            throw new Exception("ERRO AO OBTER ANO");
-        }
-
-
-        public TransacoesViewModel(IEnumerable<Transacao> transacoesModel, decimal saldoUltimoDiaMesAnterior)
-        {
             transacoesModel.ToList().Sort((x, y) => x.Data.CompareTo(y.Data));
             _transacoesModel = transacoesModel;
             SaldoUltimoDiaMesAnterior = saldoUltimoDiaMesAnterior;

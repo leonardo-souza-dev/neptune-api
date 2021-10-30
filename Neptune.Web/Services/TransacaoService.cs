@@ -18,21 +18,32 @@ namespace Neptune.Web.Services
             HttpClient = httpClient;
         }
 
-        public async Task<TransacoesViewModel> ObterTransacoesViewModel(int mes, int ano)
+        public async Task<TransacoesViewModel> ObterTransacoesViewModel(int mes, int ano, int contaId)
         {
-            var transacoes = await HttpClient.GetFromJsonAsync<List<Transacao>>("/api/transacao");
-            var contaModel = await HttpClient.GetFromJsonAsync<Conta>("/api/conta/1"); //TODO: tirar essa ContaId = 1 hardcoded
-
-            transacoes.Sort((x, y) => x.Data.CompareTo(y.Data));
-            
-            var transacoesMesPassadoPraTras = transacoes.Where(x => x.Data.Month < mes && x.Data.Year <= ano);
-            var saldoMesAnterior = contaModel.SaldoInicial - transacoesMesPassadoPraTras.Where(x => x.ContaId == contaModel.Id).Sum(x => x.Valor);
-            
+            var transacoes = await ObterTransacoesSort();            
             var transacoesModelMes = transacoes.Where(x => x.Data.Month == mes);
+            var saldoMesAnterior = await ObterSaldoMesAnterior(mes, ano, contaId, transacoes);
 
-            var transacoesViewModel = new TransacoesViewModel(transacoesModelMes, saldoMesAnterior);
+            var transacoesViewModel = new TransacoesViewModel(ano, mes, transacoesModelMes, saldoMesAnterior);
 
             return transacoesViewModel;
+        }
+
+        private async Task<decimal> ObterSaldoMesAnterior(int mes, int ano, int contaId, List<Transacao> transacoes)
+        {
+            var contaModel = await HttpClient.GetFromJsonAsync<Conta>($"/api/conta/{contaId}");
+            var transacoesMesPassadoPraTras = transacoes.Where(x => x.Data.Month < mes && x.Data.Year <= ano);
+            var saldoMesAnterior = contaModel.SaldoInicial - transacoesMesPassadoPraTras.Where(x => x.ContaId == contaModel.Id).Sum(x => x.Valor);
+
+            return saldoMesAnterior;
+        }
+
+        private async Task<List<Transacao>> ObterTransacoesSort()
+        {
+            var transacoes = await HttpClient.GetFromJsonAsync<List<Transacao>>("/api/transacao");
+            transacoes.Sort((x, y) => x.Data.CompareTo(y.Data));
+
+            return transacoes;
         }
 
         public async Task<Transacao> ObterTransacao(int id)
