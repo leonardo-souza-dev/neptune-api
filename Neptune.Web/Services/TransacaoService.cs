@@ -18,24 +18,17 @@ namespace Neptune.Web.Services
             HttpClient = httpClient;
         }
 
-        public async Task<TransacoesViewModel> ObterTransacoesViewModel(DateTime data)
+        public async Task<TransacoesViewModel> ObterTransacoesViewModel(int mes, int ano)
         {
             var transacoes = await HttpClient.GetFromJsonAsync<List<Transacao>>("/api/transacao");
             var contaModel = await HttpClient.GetFromJsonAsync<Conta>("/api/conta/1"); //TODO: tirar essa ContaId = 1 hardcoded
 
             transacoes.Sort((x, y) => x.Data.CompareTo(y.Data));
-            //var diasViewModel = new List<DiaViewModel>();
-            var transacoesMesPassadoPraTras = transacoes.Where(x => x.Data.Month < data.Month && x.Data.Year <= data.Year);
+            
+            var transacoesMesPassadoPraTras = transacoes.Where(x => x.Data.Month < mes && x.Data.Year <= ano);
             var saldoMesAnterior = contaModel.SaldoInicial - transacoesMesPassadoPraTras.Where(x => x.ContaId == contaModel.Id).Sum(x => x.Valor);
-
-            //for (int i = 0; i < transacoes.Count; i++)
-            //{
-                //var transacoesDia = transacoes.Where(x => x.Data.Day == data.Day && x.Data.Month == data.Month && x.Data.Year == data.Year);
-                //var diaViewModel = new DiaViewModel(data, transacoesDia, saldoMesAnterior + transacoesDia.Sum(x => x.Valor));
-                //diasViewModel.Add(diaViewModel);
-            //}
-
-            var transacoesModelMes = transacoes.Where(x => x.Data.Month == data.Month);
+            
+            var transacoesModelMes = transacoes.Where(x => x.Data.Month == mes);
 
             var transacoesViewModel = new TransacoesViewModel(transacoesModelMes, saldoMesAnterior);
 

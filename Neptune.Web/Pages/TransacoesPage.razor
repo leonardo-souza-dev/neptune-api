@@ -1,26 +1,34 @@
-﻿@page "/"
-
-@using Neptune.Models
+﻿@page "/{ano:int?}/{mes:int?}"
 
 @inject NavigationManager UriHelper
 @inject ITransacaoService TransacaoService
+@inject NavigationManager NavManager
 
 <h1>Transações</h1>
+
+@if (_transacoesViewModel != null)
+{
+    <div>
+        <NavLink href="@NavMesAnterior" target="_self">anterior</NavLink>
+        <span>@_transacoesViewModel.ObterMes()</span>
+        <NavLink href="@NavMesSeguinte" target="_self">próximo</NavLink>
+    </div>
+}
 
 <button class="btn btn-primary" @onclick="@NovaTransacao">Nova Transação</button>
 
 @if (_novaTransacaoVisivel)
 {
-<EditForm Model="@_novaTransacaoViewModel" OnValidSubmit="@Nova">
-    <InputDate @bind-Value="@_novaTransacaoViewModel.Data"  />
-    <InputText @bind-Value="@_novaTransacaoViewModel.Descricao" placeholder="Descrição da transação" />
-    <InputNumber @bind-Value="@_novaTransacaoViewModel.Valor" placeholder="Valor" />
-    <InputNumber @bind-Value="@_novaTransacaoViewModel.ContaId" placeholder="ContaId" />
-    <button class="btn btn-primary" type="submit">Salvar</button>
-</EditForm>
+    <EditForm Model="@_novaTransacaoViewModel" OnValidSubmit="@Nova">
+        <InputDate @bind-Value="@_novaTransacaoViewModel.Data" />
+        <InputText @bind-Value="@_novaTransacaoViewModel.Descricao" placeholder="Descrição da transação" />
+        <InputNumber @bind-Value="@_novaTransacaoViewModel.Valor" placeholder="Valor" />
+        <InputNumber @bind-Value="@_novaTransacaoViewModel.ContaId" placeholder="ContaId" />
+        <button class="btn btn-primary" type="submit">Salvar</button>
+    </EditForm>
 }
 
-@if (TransacoesViewModel == null)
+@if (_transacoesViewModel == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -37,9 +45,9 @@ else
         </thead>
         <tbody>
             <tr>
-                <th colspan="4" style="text-align: right;">Saldo no dia @TransacoesViewModel.UltimoDiaMesAnterior - @TransacoesViewModel.SaldoUltimoDiaMesAnterior</th>
+                <th colspan="4" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior - @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
             </tr>
-            @foreach (var dia in TransacoesViewModel.Dias)
+            @foreach (var dia in _transacoesViewModel.Dias)
             {
                 <TransacoesDiaComp dia="@dia" />
             }
@@ -48,13 +56,32 @@ else
 }
 
 @code {
-    TransacoesViewModel TransacoesViewModel { get; set; }
+
+    [Parameter]
+    public int Ano { get; set; }
+
+    [Parameter]
+    public int Mes { get; set; }
+
+    TransacoesViewModel _transacoesViewModel { get; set; }
     NovaTransacaoViewModel _novaTransacaoViewModel = new();
-    bool _novaTransacaoVisivel = false;
+    bool _novaTransacaoVisivel;
+    string NavMesAnterior => $"/{_transacoesViewModel.ObterAnoDoMesAnterior()}/{_transacoesViewModel.ObterMesAnterior()}";
+    string NavMesSeguinte => $"/{_transacoesViewModel.ObterAnoDoMesSeguinte()}/{_transacoesViewModel.ObterMesSeguinte()}";
 
     protected override async Task OnInitializedAsync()
     {
-        TransacoesViewModel = await TransacaoService.ObterTransacoesViewModel(DateTime.Now);
+        if (Mes == 0)
+            Mes = DateTime.Now.Month;
+        if (Ano == 0)
+            Ano = DateTime.Now.Year;
+
+        _transacoesViewModel = await TransacaoService.ObterTransacoesViewModel(Mes, Ano);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await OnInitializedAsync();
     }
 
     private void NovaTransacao()
@@ -66,7 +93,7 @@ else
     private async Task Nova()
     {
         var novaTransacaoPersistida = await TransacaoService.NovaTransacao(_novaTransacaoViewModel);
-        TransacoesViewModel.AdicionarTransacao(novaTransacaoPersistida);
+        _transacoesViewModel.AdicionarTransacao(novaTransacaoPersistida);
         _novaTransacaoVisivel = false;
     }
 }

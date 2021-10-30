@@ -8,7 +8,6 @@ namespace Neptune.Web.ViewModel
 {
     public class TransacoesViewModel
     {
-        //TODO: trocar esse valor 
         public decimal SaldoUltimoDiaMesAnterior { get; private set; }
         public string UltimoDiaMesAnterior { get { return _ultimoDiaMesAnterior.ToString("dd/MM/yyyy"); } }
         public List<DiaViewModel> Dias { get; private set; } = new();
@@ -23,15 +22,54 @@ namespace Neptune.Web.ViewModel
             }
         }
 
+        public int ObterMes()
+        {
+            if (Dias.Any())
+                return Dias.First().Data.Month;
+
+            throw new Exception("ERRO AO OBTER MES");
+        }
+
+        public int ObterMesAnterior()
+        {
+            if (Dias.Any())
+                return Dias.First().Data.AddMonths(-1).Month;
+
+            throw new Exception("ERRO AO OBTER MES");
+        }
+
+        public int ObterMesSeguinte()
+        {
+            if (Dias.Any())
+                return Dias.First().Data.AddMonths(1).Month;
+
+            throw new Exception("ERRO AO OBTER MES");
+        }
+
+        public int ObterAnoDoMesAnterior()
+        {
+            if (Dias.Any())
+                return Dias.First().Data.AddMonths(-1).Year;
+
+            throw new Exception("ERRO AO OBTER ANO");
+        }
+
+        public int ObterAnoDoMesSeguinte()
+        {
+            if (Dias.Any())
+                return Dias.First().Data.AddMonths(1).Year;
+
+            throw new Exception("ERRO AO OBTER ANO");
+        }
+
 
         public TransacoesViewModel(IEnumerable<Transacao> transacoesModel, decimal saldoUltimoDiaMesAnterior)
         {
             transacoesModel.ToList().Sort((x, y) => x.Data.CompareTo(y.Data));
-            var transacoes = transacoesModel;
-            _transacoesModel = transacoes;
+            _transacoesModel = transacoesModel;
             SaldoUltimoDiaMesAnterior = saldoUltimoDiaMesAnterior;
 
-            var dias = transacoes
+            var dias = transacoesModel
                 .GroupBy(item => new {item.Data.Month, item.Data.Day}).Select(x => x.First())
                 .Select(d => d.Data).ToList();
 
@@ -39,7 +77,7 @@ namespace Neptune.Web.ViewModel
             for (var index = 0; index < dias.Count; index++)
             {
                 var dia = dias[index];
-                var transacoesDia = transacoes.Where(x => x.Data.Day == dia.Day);
+                var transacoesDia = transacoesModel.Where(x => x.Data.Day == dia.Day);
 
                 if (index == 0)
                 {
@@ -84,15 +122,15 @@ namespace Neptune.Web.ViewModel
 
     public class DiaViewModel
     {
-        public List<TransacaoViewModel> Transacoes { get; set; } = new();
-        public decimal SaldoDoDiaAnterior { get; set; }
-        public DateTime Data { get; set; }
+        public List<TransacaoViewModel> Transacoes { get; } = new();
+        private decimal SaldoDoDiaAnterior { get; }
+        public DateTime Data { get; }
 
         public DiaViewModel(DateTime data, IEnumerable<Transacao> transacoesModel, decimal saldoDoDiaAnterior)
         {
             Data = data;
             SaldoDoDiaAnterior = saldoDoDiaAnterior;
-            foreach (Transacao transacaoModel in transacoesModel)
+            foreach (var transacaoModel in transacoesModel)
             {
                 Transacoes.Add(new TransacaoViewModel(transacaoModel));
             }

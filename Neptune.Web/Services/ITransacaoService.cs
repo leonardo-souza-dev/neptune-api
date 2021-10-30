@@ -8,7 +8,7 @@ namespace Neptune.Web.Services
 {
     public interface ITransacaoService
     {
-        Task<TransacoesViewModel> ObterTransacoesViewModel(DateTime data);
+        Task<TransacoesViewModel> ObterTransacoesViewModel(int mes, int ano);
         Task<Transacao> ObterTransacao(int id);
         Task<Transacao> EditarTransacao(int id, Transacao transacao);
         Task<TransacaoViewModel> NovaTransacao(NovaTransacaoViewModel novaTransacaoViewModel);
