@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "/api/transacao",
+      "launchUrl": "api/transacao",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "Neptune.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "/api/transacao",
+      "launchUrl": "api/transacao",
       "applicationUrl": "https://localhost:21061;http://localhost:43637",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

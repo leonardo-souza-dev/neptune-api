@@ -10,7 +10,7 @@
 {
     <div>
         <NavLink href="@NavMesAnterior" target="_self">anterior</NavLink>
-        <span>@_transacoesViewModel.Mes</span>
+        <span>Mês nº @_transacoesViewModel.Mes</span>
         <NavLink href="@NavMesSeguinte" target="_self">próximo</NavLink>
     </div>
 }
@@ -39,6 +39,7 @@ else
             <tr>
                 <th>Id</th>
                 <th>Descricao</th>
+                <th>Categoria</th>
                 <th>Conta</th>
                 <th>Valor</th>
                 <th>Editar</th>
@@ -46,7 +47,7 @@ else
         </thead>
         <tbody>
             <tr>
-                <th colspan="5" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior: @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
+                <th colspan="6" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior: @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
             </tr>
             @foreach (var dia in _transacoesViewModel.Dias)
             {
