@@ -34,27 +34,42 @@
 }
 else
 {
-    <table class="table transacoes">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Descricao</th>
-                <th>Categoria</th>
-                <th>Conta</th>
-                <th>Valor</th>
-                <th>Editar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th colspan="6" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior: @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
-            </tr>
-            @foreach (var dia in _transacoesViewModel.Dias)
-            {
-                <TransacoesDiaComp dia="@dia" />
-            }
-        </tbody>
-    </table>
+    <div style="display: block;">
+ 
+        <div style="" >
+            <div class="col-2" style="" >Contas</div>
+            <ul style="float: left;" >
+                @foreach (var conta in _transacoesViewModel.Contas)
+                {
+                    <li><input type="checkbox" checked="checked" @onchange="CheckChanged" /> @conta.Id - @conta.Nome</li>
+                }
+            </ul>
+        </div>
+
+        <div class="col-6" style="float: left;">
+            <table class="table transacoes">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Descricao</th>
+                        <th>Categoria</th>
+                        <th>Valor</th>
+                        <th>Conta</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th colspan="6" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior: @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
+                    </tr>
+                    @foreach (var dia in _transacoesViewModel.Dias)
+                    {
+                        <TransacoesDiaComp dia="@dia" />
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 
 @code {
@@ -67,6 +82,8 @@ else
 
     TransacoesMesViewModel _transacoesViewModel { get; set; }
     NovaTransacaoViewModel _novaTransacaoViewModel = new();
+    List<ContaViewModel> _contas = new List<ContaViewModel>();
+
     bool _novaTransacaoVisivel;
     string NavMesAnterior => $"/{_transacoesViewModel.ObterAnoDoMesAnterior()}/{_transacoesViewModel.ObterMesAnterior()}";
     string NavMesSeguinte => $"/{_transacoesViewModel.ObterAnoDoMesSeguinte()}/{_transacoesViewModel.ObterMesSeguinte()}";
@@ -78,7 +95,9 @@ else
         if (Ano == 0)
             Ano = DateTime.Now.Year;
 
-        _transacoesViewModel = await TransacaoService.ObterTransacoesMesViewModel(Mes, Ano, 1);
+        _contas = await TransacaoService.ObterContasViewModel();
+
+        _transacoesViewModel = await TransacaoService.ObterTransacoesMesViewModel(Mes, Ano, _contas.Select(x => x.Id).ToList());
     }
 
     protected override async Task OnParametersSetAsync()
@@ -97,5 +116,10 @@ else
         var novaTransacaoPersistida = await TransacaoService.NovaTransacao(_novaTransacaoViewModel);
         _transacoesViewModel.AdicionarTransacao(novaTransacaoPersistida);
         _novaTransacaoVisivel = false;
+    }
+
+    private void CheckChanged()
+    {
+        int a = 1;
     }
 }

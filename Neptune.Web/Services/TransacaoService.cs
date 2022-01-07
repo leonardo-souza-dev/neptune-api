@@ -18,22 +18,47 @@ namespace Neptune.Web.Services
             HttpClient = httpClient;
         }
 
-        public async Task<TransacoesMesViewModel> ObterTransacoesMesViewModel(int mes, int ano, int contaId)
+        public async Task<TransacoesMesViewModel> ObterTransacoesMesViewModel(int mes, int ano, List<int> contasId)
         {
             var transacoes = await ObterTransacoesSort();            
             var transacoesModelMes = transacoes.Where(x => x.Data.Month == mes);
-            var saldoMesAnterior = await ObterSaldoMesAnterior(mes, ano, contaId, transacoes);
+            var saldoMesAnterior = await ObterSaldoMesAnterior(mes, ano, contasId, transacoes);
 
-            var transacoesViewModel = new TransacoesMesViewModel(ano, mes, transacoesModelMes, saldoMesAnterior);
+            var transacoesViewModel = new TransacoesMesViewModel(ano, mes, transacoesModelMes, saldoMesAnterior, await ObterContasModel());
 
             return transacoesViewModel;
         }
 
-        private async Task<decimal> ObterSaldoMesAnterior(int mes, int ano, int contaId, List<Transacao> transacoes)
+        public async Task<List<ContaViewModel>> ObterContasViewModel()
         {
-            var contaModel = await HttpClient.GetFromJsonAsync<Conta>($"/api/conta/{contaId}");
+            var contasModel = await HttpClient.GetFromJsonAsync<List<Conta>>("/api/conta");
+
+            var contasViewModel = new List<ContaViewModel>();
+            contasModel.ForEach(x => contasViewModel.Add(new ContaViewModel(x.Id, x.Nome)));
+
+            return contasViewModel;
+        }
+
+        private async Task<List<Conta>> ObterContasModel()
+        {
+            return await HttpClient.GetFromJsonAsync<List<Conta>>("/api/conta");
+        }
+
+        private async Task<decimal> ObterSaldoMesAnterior(int mes, int ano, List<int> contasId, List<Transacao> transacoes)
+        {
+            var contasModel = new List<Conta>();
+            foreach (var contaId in contasId)
+            {
+                var contaModel2 = await HttpClient.GetFromJsonAsync<Conta>($"/api/conta/{contaId}");
+                contasModel.Add(contaModel2);
+
+            }
+            //var contaModel = await HttpClient.GetFromJsonAsync<Conta>($"/api/conta/{contaId}");
+            var saldoInicialContas = contasModel.Sum(x => x.SaldoInicial);
+
             var transacoesMesPassadoPraTras = transacoes.Where(x => x.Data.Month < mes && x.Data.Year <= ano);
-            var saldoMesAnterior = contaModel.SaldoInicial - transacoesMesPassadoPraTras.Where(x => x.ContaId == contaModel.Id).Sum(x => x.Valor);
+            //var saldoMesAnterior = contaModel.SaldoInicial - transacoesMesPassadoPraTras.Where(x => x.ContaId == contaModel.Id).Sum(x => x.Valor);
+            var saldoMesAnterior = saldoInicialContas - transacoesMesPassadoPraTras.Where(x => contasId.Contains(x.ContaId)).Sum(x => x.Valor);
 
             return saldoMesAnterior;
         }
