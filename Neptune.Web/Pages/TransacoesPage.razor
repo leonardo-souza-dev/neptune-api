@@ -64,7 +64,23 @@ else
                     </tr>
                     @foreach (var dia in _transacoesViewModel.Dias)
                     {
-                        <TransacoesDiaComp dia="@dia" />
+                        <tr>
+                            <td colspan="6">@dia.Data.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                        @foreach(TransacaoViewModel transacao in dia.Transacoes)
+                        {
+                        <tr style="background-color: #cccccc">
+                            <td>@transacao.Id</td>
+                            <td>@transacao.Descricao</td>
+                            <td>Lorem Ipsum</td>
+                            <td>@transacao.Valor</td>
+                            <td>@transacao.ContaId</td>
+                            <td><a href="/editar-transacao/@transacao.Id">Editar</a></td>
+                        </tr>
+                        }
+                        <tr>
+                            <td colspan="6" style="text-align: right;">Saldo do dia: @dia.ObterSaldoDoDia()</td>
+                        </tr>
                     }
                 </tbody>
             </table>
