@@ -6,9 +6,9 @@ namespace Neptune.Api.Services
 {
     public interface IContaRepository
     {
-        Task<List<Conta>> ObterTodas();
-        Task<Conta> Obter(int id);
-        Task<Conta> Criar(Conta conta);
-        Task<Conta> Atualizar(Conta Conta);
+        Task<List<ContaModel>> ObterTodas();
+        Task<ContaModel> Obter(int id);
+        Task<ContaModel> Criar(ContaModel conta);
+        Task<ContaModel> Atualizar(ContaModel Conta);
     }
 }

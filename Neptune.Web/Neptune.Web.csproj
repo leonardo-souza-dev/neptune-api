@@ -13,7 +13,4 @@
     <None Remove="Services\" />
     <None Remove="ViewModel\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
 </Project>

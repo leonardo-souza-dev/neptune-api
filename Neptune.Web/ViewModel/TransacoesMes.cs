@@ -6,13 +6,13 @@ using Neptune.Models;
 
 namespace Neptune.Web.ViewModel
 {
-    public class TransacoesMesViewModel
+    public class TransacoesMes
     {
         public decimal SaldoUltimoDiaMesAnterior { get; private set; }
         public string UltimoDiaMesAnterior { get { return _ultimoDiaMesAnterior.ToString("dd/MM/yyyy"); } }
-        public List<DiaViewModel> Dias { get; private set; } = new();
+        public List<Dia> Dias { get; private set; } = new();
 
-        public List<ContaViewModel> Contas { get; private set; } = new List<ContaViewModel>();
+        public List<Conta> Contas { get; private set; } = new List<Conta>();
 
         public int Ano;
         public int Mes;
@@ -25,7 +25,7 @@ namespace Neptune.Web.ViewModel
             }
         }
 
-        public TransacoesMesViewModel(int ano, int mes, IEnumerable<Transacao> transacoesModel, decimal saldoUltimoDiaMesAnterior, List<Conta> contasModel)
+        public TransacoesMes(int ano, int mes, IEnumerable<TransacaoModel> transacoesModel, decimal saldoUltimoDiaMesAnterior, List<ContaModel> contasModel)
         {
             Ano = ano;
             Mes = mes;
@@ -46,22 +46,22 @@ namespace Neptune.Web.ViewModel
 
                 if (index == 0)
                 {
-                    var diaViewModel = new DiaViewModel(dia, transacoesDia, saldoUltimoDiaMesAnterior);
+                    var diaViewModel = new Dia(dia, transacoesDia, saldoUltimoDiaMesAnterior);
                     saldoDiaAnterior = diaViewModel.ObterSaldoDoDia();
                     Dias.Add(diaViewModel);
                 }
                 else
                 {
-                    var diaViewModel = new DiaViewModel(dia, transacoesDia, saldoDiaAnterior);
+                    var diaViewModel = new Dia(dia, transacoesDia, saldoDiaAnterior);
                     saldoDiaAnterior = diaViewModel.ObterSaldoDoDia();
                     Dias.Add(diaViewModel);
                 }
             }
 
-            contasModel.ForEach(x => Contas.Add(new ContaViewModel(x.Id, x.Nome, true)));
+            contasModel.ForEach(x => Contas.Add(new Conta(x.Id, x.Nome, true)));
         }
 
-        public void AdicionarTransacao(TransacaoViewModel transacaoViewModel)
+        public void AdicionarTransacao(Transacao transacaoViewModel)
         {
             var dia = Dias.FirstOrDefault(x => (x.Data.Day == transacaoViewModel.Data.Day &&
                 x.Data.Month == transacaoViewModel.Data.Month &&
@@ -74,9 +74,9 @@ namespace Neptune.Web.ViewModel
                                                             x.Data.Year == transacaoViewModel.Data.Year));
 
                 var saldoDoDiaAnterior = diaAnterior.ObterSaldoDoDia();
-                var transacoes = new List<Transacao>() { new Transacao(transacaoViewModel.Id, transacaoViewModel.Data, transacaoViewModel.Descricao, transacaoViewModel.Valor, transacaoViewModel.ContaId) };
+                var transacoes = new List<TransacaoModel>() { new TransacaoModel(transacaoViewModel.Id, transacaoViewModel.Data, transacaoViewModel.Descricao, transacaoViewModel.Valor, transacaoViewModel.ContaId) };
 
-                var novoDia = new DiaViewModel(transacaoViewModel.Data, transacoes, saldoDoDiaAnterior);
+                var novoDia = new Dia(transacaoViewModel.Data, transacoes, saldoDoDiaAnterior);
 
                 Dias.Add(novoDia);                
             }

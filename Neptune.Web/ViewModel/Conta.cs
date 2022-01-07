@@ -2,7 +2,7 @@
 
 namespace Neptune.Web.ViewModel
 {
-    public class ContaViewModel
+    public class Conta
     {
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -22,7 +22,7 @@ namespace Neptune.Web.ViewModel
 
         public List<object> Interessados { get; set; } = new List<object> { };
 
-        public ContaViewModel(int id, string nome, bool ativo)
+        public Conta(int id, string nome, bool ativo)
         {
             Id = id;
             Nome = nome;

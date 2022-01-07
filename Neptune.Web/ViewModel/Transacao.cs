@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using Neptune.Models;
+﻿using Neptune.Models;
+using System;
 
 namespace Neptune.Web.ViewModel
 {
-    public class TransacaoViewModel
+    public class Transacao
     {
         public int Id { get; set; }
         public string Descricao { get; set; }
@@ -15,7 +12,7 @@ namespace Neptune.Web.ViewModel
         public decimal Valor { get; set; }
         public DateTime Data { get; set; }
 
-        public TransacaoViewModel(Transacao transacao)
+        public Transacao(TransacaoModel transacao)
         {
             Id = transacao.Id;
             Descricao = transacao.Descricao;

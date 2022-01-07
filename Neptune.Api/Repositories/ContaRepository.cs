@@ -8,25 +8,25 @@ namespace Neptune.Api.Services
 {
     public class ContaRepository : IContaRepository
     {
-        private readonly List<Conta> Contas = new()
+        private readonly List<ContaModel> Contas = new()
         {
-            new Conta(1, "NuConta", 1000M),
-            new Conta(2, "NuPoup", 1000M)
+            new ContaModel(1, "NuConta", 1000M),
+            new ContaModel(2, "NuPoup", 1000M)
         };
 
-        public async Task<List<Conta>> ObterTodas()
+        public async Task<List<ContaModel>> ObterTodas()
         {
             return Contas;
         }
 
-        public async Task<Conta> Obter(int id)
+        public async Task<ContaModel> Obter(int id)
         {
             return Contas.FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<Conta> Criar(Conta conta)
+        public async Task<ContaModel> Criar(ContaModel conta)
         {
-            var novaEntidade = new Conta(GetNextId(),
+            var novaEntidade = new ContaModel(GetNextId(),
                                          conta.Nome,
                                          conta.SaldoInicial);
 
@@ -35,7 +35,7 @@ namespace Neptune.Api.Services
             return novaEntidade;
         }
 
-        public async Task<Conta> Atualizar(Conta conta)
+        public async Task<ContaModel> Atualizar(ContaModel conta)
         {
             var contaAtualizar = Contas.FirstOrDefault(x => x.Id == conta.Id);
 

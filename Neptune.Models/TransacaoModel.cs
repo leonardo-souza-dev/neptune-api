@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Neptune.Models
 {
-    public class Transacao
+    public class TransacaoModel
     {
         public int Id { get; set; }
 
@@ -18,11 +18,11 @@ namespace Neptune.Models
 
         public int ContaId { get; set; }
 
-        public Transacao()
+        public TransacaoModel()
         {
         }
 
-        public Transacao(int id, DateTime data, string descricao, decimal valor, int contaId)
+        public TransacaoModel(int id, DateTime data, string descricao, decimal valor, int contaId)
         {
             Id = id;
             Data = data;
@@ -31,7 +31,7 @@ namespace Neptune.Models
             ContaId = contaId;
         }
 
-        public Transacao(DateTime data, string descricao, decimal valor, int contaId)
+        public TransacaoModel(DateTime data, string descricao, decimal valor, int contaId)
         {
             Data = data;
             Descricao = descricao;

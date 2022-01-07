@@ -31,13 +31,13 @@ namespace Neptune.Api.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> Criar([FromBody] Conta conta)
+        public async Task<IActionResult> Criar([FromBody] ContaModel conta)
         {
             return Ok(await ContaRepository.Criar(conta));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] Conta conta)
+        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] ContaModel conta)
         {
             if (!ModelState.IsValid)
             {

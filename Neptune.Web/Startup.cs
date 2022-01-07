@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neptune.Web.Data;
-using Neptune.Web.Services;
 
 namespace Neptune.Web
 {
@@ -30,12 +29,18 @@ namespace Neptune.Web
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
-            services.AddHttpClient<ITransacaoService, TransacaoService>(client =>
-            {
+
+            services.AddHttpClient<TransacaoService>(client => 
+            { 
                 client.BaseAddress = new Uri("https://localhost:21061");
                 client.DefaultRequestHeaders.Add("Accept", "application/+json");
             });
+
+            //services.AddHttpClient<ITransacaoService, TransacaoService>(client =>
+            //{
+            //    client.BaseAddress = new Uri("https://localhost:21061");
+            //    client.DefaultRequestHeaders.Add("Accept", "application/+json");
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,9 +6,9 @@ namespace Neptune.Api.Services
 {
     public interface ITransacaoRepository
     {
-        Task<List<Transacao>> ObterTodas();
-        Task<Transacao> Obter(int id);
-        Task<Transacao> Criar(Transacao transacao);
-        Task<Transacao> Atualizar(Transacao transacao);
+        Task<List<TransacaoModel>> ObterTodas();
+        Task<TransacaoModel> Obter(int id);
+        Task<TransacaoModel> Criar(TransacaoModel transacao);
+        Task<TransacaoModel> Atualizar(TransacaoModel transacao);
     }
 }
