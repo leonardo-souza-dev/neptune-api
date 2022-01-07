@@ -6,11 +6,11 @@
 
 <h1>Transações</h1>
 
-@if (_transacoesViewModel != null)
+@if (_transacoesMesViewModel != null)
 {
     <div>
         <NavLink href="@NavMesAnterior" target="_self">anterior</NavLink>
-        <span>Mês nº @_transacoesViewModel.Mes</span>
+        <span>Mês nº @_transacoesMesViewModel.Mes</span>
         <NavLink href="@NavMesSeguinte" target="_self">próximo</NavLink>
     </div>
 }
@@ -19,7 +19,7 @@
 
 @if (_novaTransacaoVisivel)
 {
-    <EditForm Model="@_novaTransacaoViewModel" OnValidSubmit="@Nova">
+    <EditForm Model="@_novaTransacaoViewModel" OnValidSubmit="@AdicionarTransacao">
         <InputDate @bind-Value="@_novaTransacaoViewModel.Data" />
         <InputText @bind-Value="@_novaTransacaoViewModel.Descricao" placeholder="Descrição da transação" />
         <InputNumber @bind-Value="@_novaTransacaoViewModel.Valor" placeholder="Valor" />
@@ -28,21 +28,32 @@
     </EditForm>
 }
 
-@if (_transacoesViewModel == null)
+@if (_transacoesMesViewModel == null)
 {
     <p><em>Loading...</em></p>
 }
 else
-{
+{    
+    <EditForm Model="@_transacoesMesViewModel">
     <div style="display: block;">
  
         <div style="" >
             <div class="col-2" style="" >Contas</div>
+            
             <ul style="float: left;" >
-                @foreach (var conta in _transacoesViewModel.Contas)
+            @if (_transacoesMesViewModel.Contas.Any())
+            {
+                @foreach(var conta in _transacoesMesViewModel.Contas)
                 {
-                    <li><input type="checkbox" checked="checked" @onchange="CheckChanged" /> @conta.Id - @conta.Nome</li>
+                    <li>
+                        <InputCheckbox @bind-bind-Value="conta.Ativo"/>@conta.Id - @conta.Nome
+                    </li>
                 }
+            }
+            else
+            {
+                <li>contas vazio @_transacoesMesViewModel.Contas.Count </li>
+            }
             </ul>
         </div>
 
@@ -60,9 +71,9 @@ else
                 </thead>
                 <tbody>
                     <tr>
-                        <th colspan="6" style="text-align: right;">Saldo no dia @_transacoesViewModel.UltimoDiaMesAnterior: @_transacoesViewModel.SaldoUltimoDiaMesAnterior</th>
+                        <th colspan="6" style="text-align: right;">Saldo no dia @_transacoesMesViewModel.UltimoDiaMesAnterior: @_transacoesMesViewModel.SaldoUltimoDiaMesAnterior</th>
                     </tr>
-                    @foreach (var dia in _transacoesViewModel.Dias)
+                    @foreach (var dia in _transacoesMesViewModel.Dias)
                     {
                         <tr>
                             <td colspan="6">@dia.Data.ToString("dd/MM/yyyy")</td>
@@ -86,23 +97,25 @@ else
             </table>
         </div>
     </div>
+    </EditForm>
 }
 
 @code {
-
     [Parameter]
     public int Ano { get; set; }
 
     [Parameter]
     public int Mes { get; set; }
 
-    TransacoesMesViewModel _transacoesViewModel { get; set; }
+    TransacoesMesViewModel _transacoesMesViewModel { get; set; }
+
     NovaTransacaoViewModel _novaTransacaoViewModel = new();
+
     List<ContaViewModel> _contas = new List<ContaViewModel>();
 
     bool _novaTransacaoVisivel;
-    string NavMesAnterior => $"/{_transacoesViewModel.ObterAnoDoMesAnterior()}/{_transacoesViewModel.ObterMesAnterior()}";
-    string NavMesSeguinte => $"/{_transacoesViewModel.ObterAnoDoMesSeguinte()}/{_transacoesViewModel.ObterMesSeguinte()}";
+    string NavMesAnterior => $"/{_transacoesMesViewModel.ObterAnoDoMesAnterior()}/{_transacoesMesViewModel.ObterMesAnterior()}";
+    string NavMesSeguinte => $"/{_transacoesMesViewModel.ObterAnoDoMesSeguinte()}/{_transacoesMesViewModel.ObterMesSeguinte()}";
 
     protected override async Task OnInitializedAsync()
     {
@@ -113,7 +126,12 @@ else
 
         _contas = await TransacaoService.ObterContasViewModel();
 
-        _transacoesViewModel = await TransacaoService.ObterTransacoesMesViewModel(Mes, Ano, _contas.Select(x => x.Id).ToList());
+        _transacoesMesViewModel = await ObterTransacoesMes(Mes, Ano, _contas.Select(x => x.Id).ToList());
+    }
+
+    private async Task<TransacoesMesViewModel> ObterTransacoesMes(int mes, int ano, List<int> contas)
+    {
+        return await TransacaoService.ObterTransacoesMesViewModel(Mes, Ano, contas);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -127,15 +145,15 @@ else
         _novaTransacaoVisivel = true;
     }
 
-    private async Task Nova()
+    private async Task AdicionarTransacao()
     {
         var novaTransacaoPersistida = await TransacaoService.NovaTransacao(_novaTransacaoViewModel);
-        _transacoesViewModel.AdicionarTransacao(novaTransacaoPersistida);
+        _transacoesMesViewModel.AdicionarTransacao(novaTransacaoPersistida);
         _novaTransacaoVisivel = false;
     }
 
-    private void CheckChanged()
+    private async void ClicouConta()
     {
-        int a = 1;
+        await TransacaoService.ObterTransacoesMesViewModel(Mes, Ano, new List<int> { 1 });
     }
 }

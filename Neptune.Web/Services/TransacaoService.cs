@@ -34,7 +34,7 @@ namespace Neptune.Web.Services
             var contasModel = await HttpClient.GetFromJsonAsync<List<Conta>>("/api/conta");
 
             var contasViewModel = new List<ContaViewModel>();
-            contasModel.ForEach(x => contasViewModel.Add(new ContaViewModel(x.Id, x.Nome)));
+            contasModel.ForEach(x => contasViewModel.Add(new ContaViewModel(x.Id, x.Nome, true)));
 
             return contasViewModel;
         }

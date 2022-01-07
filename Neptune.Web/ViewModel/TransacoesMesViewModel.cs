@@ -17,12 +17,13 @@ namespace Neptune.Web.ViewModel
         public int Ano;
         public int Mes;
 
-        private DateTime _ultimoDiaMesAnterior => new DateTime(Ano, Mes, 1).AddDays(-1);
-
-        public int ObterMesAnterior() => new DateTime(Ano, Mes, 1).AddMonths(-1).Month;
-        public int ObterMesSeguinte() => new DateTime(Ano, Mes, 1).AddMonths(1).Month;
-        public int ObterAnoDoMesAnterior() => new DateTime(Ano, Mes, 1).AddMonths(-1).Year;
-        public int ObterAnoDoMesSeguinte() => new DateTime(Ano, Mes, 1).AddMonths(1).Year;
+        private DateTime _ultimoDiaMesAnterior
+        {
+            get
+            {
+                return new DateTime(Ano, Mes, 1).AddDays(-1);
+            }
+        }
 
         public TransacoesMesViewModel(int ano, int mes, IEnumerable<Transacao> transacoesModel, decimal saldoUltimoDiaMesAnterior, List<Conta> contasModel)
         {
@@ -57,7 +58,7 @@ namespace Neptune.Web.ViewModel
                 }
             }
 
-            contasModel.ForEach(x => Contas.Add(new ContaViewModel(x.Id, x.Nome)));
+            contasModel.ForEach(x => Contas.Add(new ContaViewModel(x.Id, x.Nome, true)));
         }
 
         public void AdicionarTransacao(TransacaoViewModel transacaoViewModel)
@@ -83,58 +84,26 @@ namespace Neptune.Web.ViewModel
                 dia.AdicionarTransacao(transacaoViewModel);
 
             Dias.Sort((x, y) => x.Data.CompareTo(y.Data));
-
-            RecalcularSaldoDosDias();
         }
 
-        private void RecalcularSaldoDosDias()
+        public int ObterMesAnterior()
         {
-            foreach (var dia in Dias)
-            {
-                //TODO: implementar
-            }
-        }
-    }
-
-    public class DiaViewModel
-    {
-        public List<TransacaoViewModel> Transacoes { get; } = new();
-        private decimal SaldoDoDiaAnterior { get; }
-        public DateTime Data { get; }
-
-        public DiaViewModel(DateTime data, IEnumerable<Transacao> transacoesModel, decimal saldoDoDiaAnterior)
-        {
-            Data = data;
-            SaldoDoDiaAnterior = saldoDoDiaAnterior;
-            foreach (var transacaoModel in transacoesModel)
-            {
-                Transacoes.Add(new TransacaoViewModel(transacaoModel));
-            }
+            return new DateTime(Ano, Mes, 1).AddMonths(-1).Month;
         }
 
-        public decimal ObterSaldoDoDia() =>
-            SaldoDoDiaAnterior - Transacoes.Sum(x => x.Valor);
-
-        public void AdicionarTransacao(TransacaoViewModel transacaoViewModel) =>
-            Transacoes.Add(transacaoViewModel);
-    }
-
-    public class TransacaoViewModel
-    {
-        public int Id { get; set; }
-        public string Descricao { get; set; }
-        public string Conta { get; set; }
-        public int ContaId { get; set; }
-        public decimal Valor { get; set; }
-        public DateTime Data { get; set; }
-
-        public TransacaoViewModel(Transacao transacao)
+        public int ObterMesSeguinte()
         {
-            Id = transacao.Id;
-            Descricao = transacao.Descricao;
-            ContaId = transacao.ContaId;
-            Valor = transacao.Valor;
-            Data = transacao.Data;
+            return new DateTime(Ano, Mes, 1).AddMonths(1).Month;
+        }
+
+        public int ObterAnoDoMesAnterior()
+        {
+            return new DateTime(Ano, Mes, 1).AddMonths(-1).Year;
+        }
+
+        public int ObterAnoDoMesSeguinte()
+        {
+            return new DateTime(Ano, Mes, 1).AddMonths(1).Year;
         }
     }
 }
