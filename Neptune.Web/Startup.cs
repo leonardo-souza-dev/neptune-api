@@ -30,7 +30,7 @@ namespace Neptune.Web
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddHttpClient<TransacaoService>(client => 
+            services.AddHttpClient<PagesService>(client => 
             { 
                 client.BaseAddress = new Uri("https://localhost:21061");
                 client.DefaultRequestHeaders.Add("Accept", "application/+json");

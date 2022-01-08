@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Neptune.Models;
+using Neptune.Domain;
 
 namespace Neptune.Web.ViewModel
 {
@@ -12,7 +12,7 @@ namespace Neptune.Web.ViewModel
         private decimal SaldoDoDiaAnterior { get; }
         public DateTime Data { get; }
 
-        public Dia(DateTime data, IEnumerable<TransacaoModel> transacoesModel, decimal saldoDoDiaAnterior)
+        public Dia(DateTime data, IEnumerable<TransacaoDomain> transacoesModel, decimal saldoDoDiaAnterior)
         {
             Data = data;
             SaldoDoDiaAnterior = saldoDoDiaAnterior;

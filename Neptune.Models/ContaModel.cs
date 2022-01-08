@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Neptune.Models
+namespace Neptune.Domain
 {
-    public class ContaModel
+    public class ContaDomain
     {
         public int Id { get; set; }
 
@@ -14,7 +14,7 @@ namespace Neptune.Models
         [Required]
         public decimal SaldoInicial { get; set; }
 
-        public ContaModel(int id, string nome, decimal saldoInicial)
+        public ContaDomain(int id, string nome, decimal saldoInicial)
         {
             Id = id;
             Nome = nome;

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Neptune.Models;
+using Neptune.Domain;
 
 namespace Neptune.Web.ViewModel
 {
-    public class TransacoesMes
+    public class TransacoesMes 
     {
         public decimal SaldoUltimoDiaMesAnterior { get; private set; }
         public string UltimoDiaMesAnterior { get { return _ultimoDiaMesAnterior.ToString("dd/MM/yyyy"); } }
@@ -25,7 +25,12 @@ namespace Neptune.Web.ViewModel
             }
         }
 
-        public TransacoesMes(int ano, int mes, IEnumerable<TransacaoModel> transacoesModel, decimal saldoUltimoDiaMesAnterior, List<ContaModel> contasModel)
+        public TransacoesMes(int ano, 
+                             int mes, 
+                             IEnumerable<TransacaoDomain> transacoesModel, 
+                             decimal saldoUltimoDiaMesAnterior, 
+                             List<ContaDomain> contasAtivasModel,
+                             List<ContaDomain> todasContasModel)
         {
             Ano = ano;
             Mes = mes;
@@ -58,7 +63,18 @@ namespace Neptune.Web.ViewModel
                 }
             }
 
-            contasModel.ForEach(x => Contas.Add(new Conta(x.Id, x.Nome, true)));
+            todasContasModel.ForEach(x => 
+            {
+                var ativo = false;
+                foreach (var contaAtiva in contasAtivasModel)
+                {
+                    if (x.Id == contaAtiva.Id)
+                    {
+                        ativo = true;
+                    }
+                }
+                Contas.Add(new Conta(x.Id, x.Nome, ativo)); 
+            });
         }
 
         public void AdicionarTransacao(Transacao transacaoViewModel)
@@ -74,7 +90,7 @@ namespace Neptune.Web.ViewModel
                                                             x.Data.Year == transacaoViewModel.Data.Year));
 
                 var saldoDoDiaAnterior = diaAnterior.ObterSaldoDoDia();
-                var transacoes = new List<TransacaoModel>() { new TransacaoModel(transacaoViewModel.Id, transacaoViewModel.Data, transacaoViewModel.Descricao, transacaoViewModel.Valor, transacaoViewModel.ContaId) };
+                var transacoes = new List<TransacaoDomain>() { new TransacaoDomain(transacaoViewModel.Id, transacaoViewModel.Data, transacaoViewModel.Descricao, transacaoViewModel.Valor, transacaoViewModel.ContaId) };
 
                 var novoDia = new Dia(transacaoViewModel.Data, transacoes, saldoDoDiaAnterior);
 

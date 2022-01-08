@@ -2,7 +2,7 @@
 
 @using Neptune.Web.Data
 
-@inject TransacaoService _transacaoService
+@inject PagesService _pageService
 
 <h1>Transações</h1>
 
@@ -100,7 +100,7 @@ else
     </EditForm>
 }
 
-@code {
+@code  {
     [Parameter]
     public int Ano { get; set; }
 
@@ -124,14 +124,11 @@ else
         if (Ano == 0)
             Ano = DateTime.Now.Year;
 
-        _contas = await _transacaoService.ObterContas();
+        _contas = await _pageService.ObterContas();
 
-        _transacoesMes = await ObterTransacoesMes(Mes, Ano, _contas.Select(x => x.Id).ToList());
-    }
+        await _pageService.ObterTransacoesMesPage(Mes, Ano, _contas.Select(x => x.Id).ToList());
 
-    private async Task<TransacoesMes> ObterTransacoesMes(int mes, int ano, List<int> contas)
-    {
-        return await _transacaoService.ObterTransacoesMes(Mes, Ano, contas);
+        _transacoesMes = _pageService.TransacoesMes;
     }
 
     protected override async Task OnParametersSetAsync()
@@ -147,13 +144,8 @@ else
 
     private async Task AdicionarTransacao()
     {
-        var novaTransacaoPersistida = await _transacaoService.NovaTransacao(_novaTransacaoViewModel);
+        var novaTransacaoPersistida = await _pageService.NovaTransacao(_novaTransacaoViewModel);
         _transacoesMes.AdicionarTransacao(novaTransacaoPersistida);
         _novaTransacaoVisivel = false;
-    }
-
-    private async void ClicouConta()
-    {
-        await _transacaoService.ObterTransacoesMes(Mes, Ano, new List<int> { 1 });
     }
 }

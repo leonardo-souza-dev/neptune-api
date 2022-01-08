@@ -3,55 +3,68 @@ using System.Net.Http;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Neptune.Models;
+using Neptune.Domain;
 using Neptune.Web.ViewModel;
+using System;
 
 namespace Neptune.Web.Data
 {
-    public class TransacaoService 
+    public class PagesService : IInteressado
     {
         public HttpClient HttpClient;
+        public TransacoesMes TransacoesMes;
 
-        public TransacaoService(HttpClient httpClient)
+        public PagesService(HttpClient httpClient)
         {
             HttpClient = httpClient;
         }
 
-        public async Task<TransacoesMes> ObterTransacoesMes(int mes, int ano, List<int> contasId)
+        public async Task ObterTransacoesMesPage(int mes, int ano, List<int> contasId)
         {
             var transacoesModel = await ObterTransacoesModelSort();            
             var transacoesModelMes = transacoesModel.Where(x => x.Data.Month == mes);
             var saldoMesAnterior = await ObterSaldoMesAnterior(mes, ano, contasId, transacoesModel);
 
-            var transacoesViewModel = new TransacoesMes(ano, mes, transacoesModelMes, saldoMesAnterior, await ObterContasModel());
+            var todasContasModel = await ObterContasModel();
 
-            return transacoesViewModel;
+            TransacoesMes = new TransacoesMes(ano,
+                                              mes,
+                                              transacoesModelMes,
+                                              saldoMesAnterior,
+                                              todasContasModel.Where(x => contasId.Contains(x.Id)).ToList(),
+                                              todasContasModel);
+
+            TransacoesMes.Contas.ForEach(x => x.AdicionarInteressado(this));
         }
 
         public async Task<List<Conta>> ObterContas()
         {
-            var contasModel = await HttpClient.GetFromJsonAsync<List<Conta>>("/api/conta");
+            var contasModel = await HttpClient.GetFromJsonAsync<List<ContaDomain>>("/api/conta");
 
-            var contasViewModel = new List<Conta>();
-            contasModel.ForEach(x => contasViewModel.Add(new Conta(x.Id, x.Nome, true)));
+            var contas = new List<Conta>();
+            contasModel.ForEach(x => contas.Add(new Conta(x.Id, x.Nome, true)));
 
-            return contasViewModel;
+            return contas;
         }
 
-        public async Task<TransacaoModel> ObterTransacao(int id)
+        public async Task<Transacao> ObterTransacao(int id)
         {
-            return await HttpClient.GetFromJsonAsync<TransacaoModel>($"/api/transacao/{id}");
+            var transacaoDomain = await HttpClient.GetFromJsonAsync<TransacaoDomain>($"/api/transacao/{id}");
+
+            return new Transacao(transacaoDomain);
         }
 
-        public async Task<TransacaoModel> EditarTransacao(int id, TransacaoModel transacao)
+        public async Task<TransacaoDomain> EditarTransacao(int id, Transacao transacao)
         {
-            var response = await HttpClient.PutAsJsonAsync($"/api/transacao/{id}", transacao);
-            return await response.Content.ReadFromJsonAsync<Models.TransacaoModel>();
+            var transacaoDomain = new TransacaoDomain(transacao.Id, transacao.Data, transacao.Descricao, transacao.Valor, transacao.ContaId);
+            var response = await HttpClient.PutAsJsonAsync($"/api/transacao/{id}", transacaoDomain);
+
+            return await response.Content.ReadFromJsonAsync<TransacaoDomain>();
         }
 
         public async Task<Transacao> NovaTransacao(NovaTransacao novaTransacaoViewModel)
         {
-            var transacao = new TransacaoModel
+            var transacao = new TransacaoDomain
             {
                 Data = novaTransacaoViewModel.Data,
                 Descricao = novaTransacaoViewModel.Descricao,
@@ -60,7 +73,7 @@ namespace Neptune.Web.Data
             };
 
             var response = await HttpClient.PostAsJsonAsync("/api/transacao", transacao);
-            var transacaoModel = await response.Content.ReadFromJsonAsync<TransacaoModel>();
+            var transacaoModel = await response.Content.ReadFromJsonAsync<TransacaoDomain>();
 
             return new Transacao(transacaoModel);
         }
@@ -69,22 +82,31 @@ namespace Neptune.Web.Data
 
 
 
-
-
-
-
-
-        private async Task<List<ContaModel>> ObterContasModel()
+        public async Task Atualizar()
         {
-            return await HttpClient.GetFromJsonAsync<List<ContaModel>>("/api/conta");
+            var contas = TransacoesMes.Contas.Where(x => x.Ativo).Select(x => x.Id).ToList();
+
+            await ObterTransacoesMesPage(TransacoesMes.Mes,
+                                     TransacoesMes.Ano,
+                                     contas);
         }
 
-        private async Task<decimal> ObterSaldoMesAnterior(int mes, int ano, List<int> contasId, List<Models.TransacaoModel> transacoes)
+
+
+
+
+
+        private async Task<List<ContaDomain>> ObterContasModel()
         {
-            var contasModel = new List<ContaModel>();
+            return await HttpClient.GetFromJsonAsync<List<ContaDomain>>("/api/conta");
+        }
+
+        private async Task<decimal> ObterSaldoMesAnterior(int mes, int ano, List<int> contasId, List<TransacaoDomain> transacoes)
+        {
+            var contasModel = new List<ContaDomain>();
             foreach (var contaId in contasId)
             {
-                var contaModel2 = await HttpClient.GetFromJsonAsync<ContaModel>($"/api/conta/{contaId}");
+                var contaModel2 = await HttpClient.GetFromJsonAsync<ContaDomain>($"/api/conta/{contaId}");
                 contasModel.Add(contaModel2);
             }
             var saldoInicialContas = contasModel.Sum(x => x.SaldoInicial);
@@ -95,9 +117,9 @@ namespace Neptune.Web.Data
             return saldoMesAnterior;
         }
 
-        private async Task<List<TransacaoModel>> ObterTransacoesModelSort()
+        private async Task<List<TransacaoDomain>> ObterTransacoesModelSort()
         {
-            var transacoes = await HttpClient.GetFromJsonAsync<List<TransacaoModel>>("/api/transacao");
+            var transacoes = await HttpClient.GetFromJsonAsync<List<TransacaoDomain>>("/api/transacao");
             transacoes.Sort((x, y) => x.Data.CompareTo(y.Data));
 
             return transacoes;

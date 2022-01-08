@@ -17,10 +17,24 @@ namespace Neptune.Web.ViewModel
             set
             {
                 _ativo = value;
+                NotificarInteressados();
             }
         }
 
-        public List<object> Interessados { get; set; } = new List<object> { };
+        public void AdicionarInteressado(IInteressado interessado)
+        {
+            Interessados.Add(interessado);
+        }
+
+        public void NotificarInteressados()
+        {
+            foreach (var interessado in Interessados)
+            {
+                interessado.Atualizar();
+            }
+        }
+
+        public List<IInteressado> Interessados { get; set; } = new ();
 
         public Conta(int id, string nome, bool ativo)
         {

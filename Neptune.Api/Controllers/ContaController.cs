@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Neptune.Api.Services;
-using Neptune.Models;
+using Neptune.Infra;
+using Neptune.Domain;
+using Neptune.Application;
 
 namespace Neptune.Api.Controllers
 {
@@ -11,45 +12,45 @@ namespace Neptune.Api.Controllers
     [Route("api/[controller]")]
     public class ContaController : ControllerBase
     {
-        private readonly IContaRepository ContaRepository;
+        private readonly IContaService _contaService;
 
-        public ContaController(IContaRepository transacaoRepository)
+        public ContaController(IContaService contaService)
         {
-            ContaRepository = transacaoRepository;
+            _contaService = contaService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            return Ok(await ContaRepository.ObterTodas());
+            return Ok(_contaService.ObterTodas());
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Obter(int id)
+        public IActionResult Obter(int id)
         {
-            return Ok(await ContaRepository.Obter(id));
+            return Ok(_contaService.Obter(id));
         }
 
-        [HttpPost()]
-        public async Task<IActionResult> Criar([FromBody] ContaModel conta)
-        {
-            return Ok(await ContaRepository.Criar(conta));
-        }
+        //[HttpPost()]
+        //public async Task<IActionResult> Criar([FromBody] ContaDomain conta)
+        //{
+        //    return Ok(await _contaService.Criar(conta));
+        //}
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] ContaModel conta)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] ContaDomain conta)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            if (id != conta.Id)
-            {
-                return BadRequest("Id inválido");
-            }
+        //    if (id != conta.Id)
+        //    {
+        //        return BadRequest("Id inválido");
+        //    }
 
-            return Ok(await ContaRepository.Atualizar(conta));
-        }
+        //    return Ok(await _contaService.Atualizar(conta));
+        //}
     }
 }

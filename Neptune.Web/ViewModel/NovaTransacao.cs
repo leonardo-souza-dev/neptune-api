@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Neptune.Models;
+using Neptune.Domain;
 
 namespace Neptune.Web.ViewModel
 {
@@ -12,9 +12,9 @@ namespace Neptune.Web.ViewModel
         public decimal Valor { get; set; }
         public int ContaId { get; set; }
 
-        public TransacaoModel ToModel()
+        public TransacaoDomain ToDomain()
         {
-            return new TransacaoModel(Data, Descricao, Valor, ContaId);
+            return new TransacaoDomain(Data, Descricao, Valor, ContaId);
         }
     }
 }

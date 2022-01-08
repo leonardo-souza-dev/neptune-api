@@ -1,4 +1,4 @@
-﻿using Neptune.Models;
+﻿using Neptune.Domain;
 using System;
 
 namespace Neptune.Web.ViewModel
@@ -12,7 +12,7 @@ namespace Neptune.Web.ViewModel
         public decimal Valor { get; set; }
         public DateTime Data { get; set; }
 
-        public Transacao(TransacaoModel transacao)
+        public Transacao(TransacaoDomain transacao)
         {
             Id = transacao.Id;
             Descricao = transacao.Descricao;

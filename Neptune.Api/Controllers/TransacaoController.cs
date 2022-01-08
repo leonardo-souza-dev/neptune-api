@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Neptune.Api.Services;
-using Neptune.Models;
+using Neptune.Application;
+using Neptune.Domain;
+using Neptune.Infra;
 
 namespace Neptune.Api.Controllers
 {
@@ -11,45 +12,45 @@ namespace Neptune.Api.Controllers
     [Route("api/[controller]")]
     public class TransacaoController : ControllerBase
     {
-        private readonly ITransacaoRepository TransacaoRepository;
+        private readonly ITransacaoService _transacaoService;
 
-        public TransacaoController(ITransacaoRepository transacaoRepository)
+        public TransacaoController(ITransacaoService transacaoService)
         {
-            TransacaoRepository = transacaoRepository;
+            _transacaoService = transacaoService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            return Ok(await TransacaoRepository.ObterTodas());
+            return Ok(_transacaoService.ObterTodas());
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Obter(int id)
-        {
-            return Ok(await TransacaoRepository.Obter(id));
-        }
+        //[HttpGet("{id}")]
+        //public IActionResult Obter(int id)
+        //{
+        //    return Ok(_transacaoService.Obter(id));
+        //}
 
-        [HttpPost()]
-        public async Task<IActionResult> Criar([FromBody] TransacaoModel transacao)
-        {
-            return Ok(await TransacaoRepository.Criar(transacao));
-        }
+        //[HttpPost()]
+        //public IActionResult Criar([FromBody] TransacaoDomain transacao)
+        //{
+        //    return Ok(_transacaoService.Criar(transacao));
+        //}
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] TransacaoModel transacao)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpPut("{id}")]
+        //public IActionResult Atualizar([FromRoute] int id, [FromBody] TransacaoDomain transacao)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            if (id != transacao.Id)
-            {
-                return BadRequest("Id inválido");
-            }
+        //    if (id != transacao.Id)
+        //    {
+        //        return BadRequest("Id inválido");
+        //    }
 
-            return Ok(await TransacaoRepository.Atualizar(transacao));
-        }
+        //    return Ok(_transacaoService.Atualizar(transacao));
+        //}
     }
 }
