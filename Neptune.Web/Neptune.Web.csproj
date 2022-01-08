@@ -5,16 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Neptune.Models\Neptune.Models.csproj">
+    <ProjectReference Include="..\Neptune.Models\Neptune.Domain.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Remove="Services\" />
     <None Remove="ViewModel\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-    <Folder Include="ViewModel\" />
   </ItemGroup>
 </Project>

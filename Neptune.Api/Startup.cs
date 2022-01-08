@@ -11,7 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Neptune.Api.Services;
+using Neptune.Application;
+using Neptune.Infra;
 
 namespace Neptune.Api
 {
@@ -38,6 +39,9 @@ namespace Neptune.Api
                         builder.WithOrigins("http://127.0.0.1:5000").AllowAnyMethod().AllowAnyHeader();
                     });
             });
+
+            services.AddSingleton<ITransacaoService, TransacaoService>();
+            services.AddSingleton<IContaService, ContaService>();
 
             services.AddSingleton<ITransacaoRepository, TransacaoRepository>();
             services.AddSingleton<IContaRepository, ContaRepository>();

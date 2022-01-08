@@ -1,7 +1,9 @@
 ﻿@page "/nova-transacao"
 
+@using Neptune.Web.Data
+
 @inject NavigationManager UriHelper
-@inject ITransacaoService TransacaoService
+@inject PagesService TransacaoService
 
 <h1>Nova Transação</h1>
 
@@ -12,7 +14,7 @@
 <button class="btn btn-primary" @onclick="Nova">Salvar</button>
 
 @code {
-    NovaTransacaoViewModel novaTransacaoViewModel = new();
+    NovaTransacao novaTransacaoViewModel = new();
 
     private async Task Nova()
     {

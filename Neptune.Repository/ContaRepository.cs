@@ -1,40 +1,42 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Neptune.Models;
+using Neptune.Domain;
 using System.Threading.Tasks;
 
-namespace Neptune.Api.Services
+namespace Neptune.Infra
 {
     public class ContaRepository : IContaRepository
     {
-        private readonly List<Conta> Contas = new()
+        //TODO: trocar por base de dados real
+
+        private readonly List<ContaDomain> Contas = new()
         {
-            new Conta(1, "NuPoup", 100M)
+            new ContaDomain(1, "NuConta", 1000M),
+            new ContaDomain(2, "NuPoup", 1000M)
         };
 
-        public async Task<List<Conta>> ObterTodas()
+        public List<ContaDomain> ObterTodas()
         {
             return Contas;
         }
 
-        public async Task<Conta> Obter(int id)
+        public ContaDomain Obter(int id)
         {
+            
             return Contas.FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<Conta> Criar(Conta conta)
+        public ContaDomain Criar(ContaDomain conta)
         {
-            var novaEntidade = new Conta(GetNextId(),
-                                         conta.Nome,
-                                         conta.SaldoInicial);
+            var novaEntidade = new ContaDomain(GetNextId(), conta.Nome, conta.SaldoInicial);
 
             Contas.Add(novaEntidade);
 
             return novaEntidade;
         }
 
-        public async Task<Conta> Atualizar(Conta conta)
+        public ContaDomain Atualizar(ContaDomain conta)
         {
             var contaAtualizar = Contas.FirstOrDefault(x => x.Id == conta.Id);
 

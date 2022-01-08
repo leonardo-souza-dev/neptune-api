@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Neptune.Models
+namespace Neptune.Domain
 {
-    public class Transacao
+    public class TransacaoDomain
     {
         public int Id { get; set; }
 
@@ -18,11 +18,11 @@ namespace Neptune.Models
 
         public int ContaId { get; set; }
 
-        public Transacao()
+        public TransacaoDomain()
         {
         }
 
-        public Transacao(int id, DateTime data, string descricao, decimal valor, int contaId)
+        public TransacaoDomain(int id, DateTime data, string descricao, decimal valor, int contaId)
         {
             Id = id;
             Data = data;
@@ -31,7 +31,7 @@ namespace Neptune.Models
             ContaId = contaId;
         }
 
-        public Transacao(DateTime data, string descricao, decimal valor, int contaId)
+        public TransacaoDomain(DateTime data, string descricao, decimal valor, int contaId)
         {
             Data = data;
             Descricao = descricao;

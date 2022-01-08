@@ -1,36 +1,37 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Neptune.Models;
+using Neptune.Domain;
 using System.Threading.Tasks;
 
-namespace Neptune.Api.Services
+namespace Neptune.Infra
 {
     public class TransacaoRepository : ITransacaoRepository
     {
-        private readonly List<Transacao> _transacoes = new();
+        private readonly List<TransacaoDomain> _transacoes = new();
 
         public TransacaoRepository()
         {
-            _transacoes.Add(new Transacao(1, DateTime.Now.AddMonths(-1), "Pão", 1M, 1));
-            _transacoes.Add(new Transacao(2, DateTime.Now.AddDays(-7), "Café", 4M, 1));
-            _transacoes.Add(new Transacao(3, DateTime.Now, "Bolacha", 2M, 1));
-            _transacoes.Add(new Transacao(4, DateTime.Now.AddDays(1), "Manteiga", 10M, 1));
+            _transacoes.Add(new TransacaoDomain(1, DateTime.Now.AddMonths(-1), "Pãoooooooo", 1M, 1));
+            _transacoes.Add(new TransacaoDomain(2, DateTime.Now.AddMonths(-1), "Rendimento", 10M, 2));
+
+            _transacoes.Add(new TransacaoDomain(3, DateTime.Now, "Cafééééééé", 2M, 1));
+            _transacoes.Add(new TransacaoDomain(4, DateTime.Now, "Rendimento", 2M, 2));
         }
 
-        public async Task<List<Transacao>> ObterTodas()
+        public List<TransacaoDomain> ObterTodas()
         {
             return _transacoes;
         }
 
-        public async Task<Transacao> Obter(int id)
+        public TransacaoDomain Obter(int id)
         {
             return _transacoes.FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<Transacao> Criar(Transacao transacao)
+        public TransacaoDomain Criar(TransacaoDomain transacao)
         {
-            var novaEntidade = new Transacao(GetNextId(),
+            var novaEntidade = new TransacaoDomain(GetNextId(),
                                          transacao.Data,
                                          transacao.Descricao,
                                          transacao.Valor,
@@ -41,7 +42,7 @@ namespace Neptune.Api.Services
             return novaEntidade;
         }
 
-        public async Task<Transacao> Atualizar(Transacao transacao)
+        public TransacaoDomain Atualizar(TransacaoDomain transacao)
         {
             var transacaoEditada = _transacoes.FirstOrDefault(x => x.Id == transacao.Id);
 

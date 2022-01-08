@@ -1,9 +1,9 @@
 ﻿@page "/editar-transacao/{id}"
 
-@using Neptune.Models
+@using Neptune.Web.Data
 
 @inject NavigationManager UriHelper
-@inject ITransacaoService TransacaoService
+@inject PagesService TransacaoService
 
 <h1>Editar Transação</h1>
 
@@ -18,10 +18,12 @@
     [Parameter]
     public String id { get; set; }
 
-    Transacao transacao = new Transacao();
+    Transacao transacao = null;
 
-    protected override async Task OnInitializedAsync() =>
-        transacao = await TransacaoService.ObterTransacao(Convert.ToInt32(id));
+    protected override async Task OnInitializedAsync()
+    {
+        await TransacaoService.ObterTransacao(Convert.ToInt32(id));
+    }
 
     private async Task Editar()
     {
