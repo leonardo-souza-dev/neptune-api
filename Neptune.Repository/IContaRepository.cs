@@ -6,9 +6,9 @@ namespace Neptune.Infra
 {
     public interface IContaRepository
     {
-        List<ContaDomain> ObterTodas();
-        ContaDomain Obter(int id);
-        ContaDomain Criar(ContaDomain conta);
-        ContaDomain Atualizar(ContaDomain Conta);
+        List<Conta> ObterTodas();
+        Conta Obter(int id);
+        Conta Criar(Conta conta);
+        Conta Atualizar(Conta Conta);
     }
 }

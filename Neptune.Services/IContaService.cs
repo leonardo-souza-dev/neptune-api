@@ -6,7 +6,7 @@ namespace Neptune.Application
 {
     public interface IContaService
     {
-        List<ContaDomain> ObterTodas();
-        ContaDomain Obter(int id);
+        List<Conta> ObterTodas();
+        Conta Obter(int id);
     }
 }

@@ -6,7 +6,9 @@ namespace Neptune.Application
 {
     public interface ITransacaoService
     {
-        List<TransacaoDomain> ObterTodas();
-        List<TransacaoDomain> ObterPorConta(int contaId);
+        List<Transacao> ObterTodas();
+        List<Transacao> ObterPorContaEMes(int contaId, int mes, int ano);
+        Transacao Criar(Transacao transacao);
+        Transacao Atualizar(Transacao transacao);
     }
 }

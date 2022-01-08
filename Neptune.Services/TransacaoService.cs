@@ -14,14 +14,24 @@ namespace Neptune.Application
             _transacaoRepository = transacaoRepository;
         }
 
-        public List<TransacaoDomain> ObterTodas()
+        public List<Transacao> ObterTodas()
         {
             return _transacaoRepository.ObterTodas();
         }
 
-        public List<TransacaoDomain> ObterPorConta(int contaId)
+        public List<Transacao> ObterPorContaEMes(int contaId, int mes, int ano)
         {
-            return new List<TransacaoDomain>();
+            return _transacaoRepository.ObterPorContaEMes(contaId, mes, ano);
+        }
+
+        public Transacao Criar(Transacao transacao)
+        {
+            return _transacaoRepository.Criar(transacao);
+        }
+
+        public Transacao Atualizar(Transacao transacao)
+        {
+            return _transacaoRepository.Atualizar(transacao);
         }
     }
 }

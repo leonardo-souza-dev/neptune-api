@@ -8,30 +8,38 @@ namespace Neptune.Infra
 {
     public class TransacaoRepository : ITransacaoRepository
     {
-        private readonly List<TransacaoDomain> _transacoes = new();
+        private readonly List<Transacao> _transacoes = new();
 
         public TransacaoRepository()
         {
-            _transacoes.Add(new TransacaoDomain(1, DateTime.Now.AddMonths(-1), "Pãoooooooo", 1M, 1));
-            _transacoes.Add(new TransacaoDomain(2, DateTime.Now.AddMonths(-1), "Rendimento", 10M, 2));
+            _transacoes.Add(new Transacao(1, DateTime.Now.AddMonths(-1), "Pãoooooooo", 1M, 1));
+            _transacoes.Add(new Transacao(2, DateTime.Now.AddMonths(-1), "Rendimento", 10M, 2));
 
-            _transacoes.Add(new TransacaoDomain(3, DateTime.Now, "Cafééééééé", 2M, 1));
-            _transacoes.Add(new TransacaoDomain(4, DateTime.Now, "Rendimento", 2M, 2));
+            _transacoes.Add(new Transacao(3, DateTime.Now, "Cafééééééé", 2M, 1));
+            _transacoes.Add(new Transacao(4, DateTime.Now, "Rendimento", 2M, 2));
         }
 
-        public List<TransacaoDomain> ObterTodas()
+        public List<Transacao> ObterTodas()
         {
             return _transacoes;
         }
 
-        public TransacaoDomain Obter(int id)
+        public Transacao Obter(int id)
         {
             return _transacoes.FirstOrDefault(x => x.Id == id);
         }
 
-        public TransacaoDomain Criar(TransacaoDomain transacao)
+        public List<Transacao> ObterPorContaEMes(int contaId, int mes, int ano)
         {
-            var novaEntidade = new TransacaoDomain(GetNextId(),
+            return _transacoes
+                .Where(x => x.ContaId == contaId && 
+                x.Data.Month == mes && 
+                x.Data.Year == ano).ToList();
+        }
+
+        public Transacao Criar(Transacao transacao)
+        {
+            var novaEntidade = new Transacao(GetNextId(),
                                          transacao.Data,
                                          transacao.Descricao,
                                          transacao.Valor,
@@ -42,7 +50,7 @@ namespace Neptune.Infra
             return novaEntidade;
         }
 
-        public TransacaoDomain Atualizar(TransacaoDomain transacao)
+        public Transacao Atualizar(Transacao transacao)
         {
             var transacaoEditada = _transacoes.FirstOrDefault(x => x.Id == transacao.Id);
 

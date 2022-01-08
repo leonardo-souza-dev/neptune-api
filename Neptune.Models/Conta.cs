@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Neptune.Domain
 {
-    public class ContaDomain
+    public class Conta
     {
         public int Id { get; set; }
 
@@ -14,7 +14,7 @@ namespace Neptune.Domain
         [Required]
         public decimal SaldoInicial { get; set; }
 
-        public ContaDomain(int id, string nome, decimal saldoInicial)
+        public Conta(int id, string nome, decimal saldoInicial)
         {
             Id = id;
             Nome = nome;

@@ -10,33 +10,33 @@ namespace Neptune.Infra
     {
         //TODO: trocar por base de dados real
 
-        private readonly List<ContaDomain> Contas = new()
+        private readonly List<Conta> Contas = new()
         {
-            new ContaDomain(1, "NuConta", 1000M),
-            new ContaDomain(2, "NuPoup", 1000M)
+            new Conta(1, "NuConta", 1000M),
+            new Conta(2, "NuPoup", 1000M)
         };
 
-        public List<ContaDomain> ObterTodas()
+        public List<Conta> ObterTodas()
         {
             return Contas;
         }
 
-        public ContaDomain Obter(int id)
+        public Conta Obter(int id)
         {
             
             return Contas.FirstOrDefault(x => x.Id == id);
         }
 
-        public ContaDomain Criar(ContaDomain conta)
+        public Conta Criar(Conta conta)
         {
-            var novaEntidade = new ContaDomain(GetNextId(), conta.Nome, conta.SaldoInicial);
+            var novaEntidade = new Conta(GetNextId(), conta.Nome, conta.SaldoInicial);
 
             Contas.Add(novaEntidade);
 
             return novaEntidade;
         }
 
-        public ContaDomain Atualizar(ContaDomain conta)
+        public Conta Atualizar(Conta conta)
         {
             var contaAtualizar = Contas.FirstOrDefault(x => x.Id == conta.Id);
 

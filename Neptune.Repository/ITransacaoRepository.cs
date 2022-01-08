@@ -6,9 +6,10 @@ namespace Neptune.Infra
 {
     public interface ITransacaoRepository
     {
-        List<TransacaoDomain> ObterTodas();
-        TransacaoDomain Obter(int id);
-        TransacaoDomain Criar(TransacaoDomain transacao);
-        TransacaoDomain Atualizar(TransacaoDomain transacao);
+        List<Transacao> ObterTodas();
+        Transacao Obter(int id);
+        Transacao Criar(Transacao transacao);
+        Transacao Atualizar(Transacao transacao);
+        List<Transacao> ObterPorContaEMes(int contaId, int mes, int ano);
     }
 }

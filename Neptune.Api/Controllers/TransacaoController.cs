@@ -25,32 +25,32 @@ namespace Neptune.Api.Controllers
             return Ok(_transacaoService.ObterTodas());
         }
 
-        //[HttpGet("{id}")]
-        //public IActionResult Obter(int id)
-        //{
-        //    return Ok(_transacaoService.Obter(id));
-        //}
+        [HttpGet("{contaId}/{mes}/{ano}")]
+        public IActionResult ObterPorContaEMes(int contaId, int mes, int ano)
+        {
+            return Ok(_transacaoService.ObterPorContaEMes(contaId, mes, ano));
+        }
 
-        //[HttpPost()]
-        //public IActionResult Criar([FromBody] TransacaoDomain transacao)
-        //{
-        //    return Ok(_transacaoService.Criar(transacao));
-        //}
+        [HttpPost()]
+        public IActionResult Criar([FromBody] Transacao transacao)
+        {
+            return Ok(_transacaoService.Criar(transacao));
+        }
 
-        //[HttpPut("{id}")]
-        //public IActionResult Atualizar([FromRoute] int id, [FromBody] TransacaoDomain transacao)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        [HttpPut("{id}")]
+        public IActionResult Atualizar([FromRoute] int id, [FromBody] Transacao transacao)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    if (id != transacao.Id)
-        //    {
-        //        return BadRequest("Id inválido");
-        //    }
+            if (id != transacao.Id)
+            {
+                return BadRequest("Id inválido");
+            }
 
-        //    return Ok(_transacaoService.Atualizar(transacao));
-        //}
+            return Ok(_transacaoService.Atualizar(transacao));
+        }
     }
 }

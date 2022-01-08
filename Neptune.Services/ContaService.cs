@@ -14,12 +14,12 @@ namespace Neptune.Application
             _contaRepository = contaRepository;
         }
 
-        public List<ContaDomain> ObterTodas()
+        public List<Conta> ObterTodas()
         {
             return _contaRepository.ObterTodas();
         }
 
-        public ContaDomain Obter(int id)
+        public Conta Obter(int id)
         {
             return _contaRepository.Obter(id);
         }
