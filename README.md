@@ -1,6 +1,6 @@
-# neptune-blazor-crud
-A Blazor Server Side Crud with Api
+# neptune-api
+Api for Neptune Blazor App
 
-* .Net 5
+* .Net 5.0
 * Blazor Server Side
-* .net core API
+* .Net core API 
