@@ -12,11 +12,15 @@ namespace Neptune.Infra
 
         public TransacaoRepository()
         {
-            _transacoes.Add(new Transacao(1, DateTime.Now.AddMonths(-1), "Pãoooooooo", 1M, 1));
+            _transacoes.Add(new Transacao(1, DateTime.Now.AddMonths(-1), "Saladaaaaa", 1M, 1));
             _transacoes.Add(new Transacao(2, DateTime.Now.AddMonths(-1), "Rendimento", 10M, 2));
 
             _transacoes.Add(new Transacao(3, DateTime.Now, "Cafééééééé", 2M, 1));
-            _transacoes.Add(new Transacao(4, DateTime.Now, "Rendimento", 2M, 2));
+            _transacoes.Add(new Transacao(5, DateTime.Now, "Paoooooooo", 1M, 1));
+            _transacoes.Add(new Transacao(6, DateTime.Now.AddDays(1), "Rendimento", 2M, 2));
+            _transacoes.Add(new Transacao(7, DateTime.Now.AddDays(2), "Uber", 20M, 2));
+
+            _transacoes.Add(new Transacao(7, DateTime.Now.AddMonths(1), "Uber", 20M, 2));
         }
 
         public List<Transacao> ObterTodas()
@@ -29,10 +33,10 @@ namespace Neptune.Infra
             return _transacoes.FirstOrDefault(x => x.Id == id);
         }
 
-        public List<Transacao> ObterPorContaEMes(int contaId, int mes, int ano)
+        public async Task<List<Transacao>> Obter(int ano, int mes, int[] contasId)
         {
             return _transacoes
-                .Where(x => x.ContaId == contaId && 
+                .Where(x => contasId.Contains(x.ContaId) && 
                 x.Data.Month == mes && 
                 x.Data.Year == ano).ToList();
         }

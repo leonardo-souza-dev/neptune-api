@@ -1,13 +1,14 @@
 ﻿using Neptune.Domain;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Neptune.Application
 {
     public interface ITransacaoService
     {
         List<Transacao> ObterTodas();
-        List<Transacao> ObterPorContaEMes(int contaId, int mes, int ano);
+        Task<List<Dia>> ObterPorDataEContas(int ano, int mes, int[] contasId);
         Transacao Criar(Transacao transacao);
         Transacao Atualizar(Transacao transacao);
     }

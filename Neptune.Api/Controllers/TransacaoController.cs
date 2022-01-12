@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Neptune.Application;
@@ -7,7 +8,7 @@ using Neptune.Infra;
 
 namespace Neptune.Api.Controllers
 {
-    [ApiController]
+    //[ApiController]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class TransacaoController : ControllerBase
@@ -19,19 +20,14 @@ namespace Neptune.Api.Controllers
             _transacaoService = transacaoService;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+
+        [HttpGet("obter-por-data-contas")]
+        public IActionResult ObterPorDataEContas([FromQuery] int ano, int mes, int[] contasId)
         {
-            return Ok(_transacaoService.ObterTodas());
+            return Ok(_transacaoService.ObterPorDataEContas(ano, mes, contasId));
         }
 
-        [HttpGet("{contaId}/{mes}/{ano}")]
-        public IActionResult ObterPorContaEMes(int contaId, int mes, int ano)
-        {
-            return Ok(_transacaoService.ObterPorContaEMes(contaId, mes, ano));
-        }
-
-        [HttpPost()]
+        [HttpPost]
         public IActionResult Criar([FromBody] Transacao transacao)
         {
             return Ok(_transacaoService.Criar(transacao));
