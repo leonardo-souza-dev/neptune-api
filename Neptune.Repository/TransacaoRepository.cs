@@ -15,10 +15,17 @@ namespace Neptune.Infra
             _transacoes.Add(new Transacao(1, DateTime.Now.AddMonths(-1), "Saladaaaaa", 1M, 1));
             _transacoes.Add(new Transacao(2, DateTime.Now.AddMonths(-1), "Rendimento", 10M, 2));
 
-            _transacoes.Add(new Transacao(3, DateTime.Now, "Cafééééééé", 2M, 1));
+            // TEMP - janeiro
+            // hoje
+            _transacoes.Add(new Transacao(3, DateTime.Now, "Cafééééééé", 1M, 1));
             _transacoes.Add(new Transacao(5, DateTime.Now, "Paoooooooo", 1M, 1));
+            
+            //amanha
+            _transacoes.Add(new Transacao(5, DateTime.Now.AddDays(1), "Outroo_jan", 1M, 1));
+
+
             _transacoes.Add(new Transacao(6, DateTime.Now.AddDays(1), "Rendimento", 2M, 2));
-            _transacoes.Add(new Transacao(7, DateTime.Now.AddDays(2), "Uber", 20M, 2));
+            _transacoes.Add(new Transacao(7, DateTime.Now.AddDays(2), "Rendimento", 20M, 2));
 
             _transacoes.Add(new Transacao(7, DateTime.Now.AddMonths(1), "Uber", 20M, 2));
         }

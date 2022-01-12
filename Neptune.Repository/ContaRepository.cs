@@ -21,9 +21,13 @@ namespace Neptune.Infra
             return Contas;
         }
 
+        public async Task<List<Conta>> Obter(int[] ids)
+        {
+            return Contas.Where(x => ids.Contains(x.Id)).ToList();
+        }
+
         public Conta Obter(int id)
         {
-            
             return Contas.FirstOrDefault(x => x.Id == id);
         }
 

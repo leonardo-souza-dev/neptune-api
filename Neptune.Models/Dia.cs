@@ -7,13 +7,39 @@ namespace Neptune.Domain
 {
     public class Dia
     {
-        public int NumeroDia { get; private set; }
         public DateTime Data { get; private set; }
         public List<Transacao> Transacoes { get; private set; } = new List<Transacao>();
 
-        public Dia(DateTime data, List<Transacao> transacoes)
+        public decimal? _saldoDoDia;
+        public decimal SaldoDoDia 
+        { 
+            get
+            {
+                if (!_saldoDoDia.HasValue)
+                {
+                    throw new NullReferenceException("SaldoDoDia");
+                }
+                else
+                {
+                    return _saldoDoDia.Value;
+                }
+            }
+            set
+            {
+                _saldoDoDia = value;
+            }
+        }
+
+        private decimal _somaTransacoes 
+        { 
+            get
+            {
+                return Transacoes.Sum(x => x.Valor);
+            }
+        }
+
+        public Dia(DateTime data, List<Transacao> transacoes, decimal saldoUltimoDiaMesAnterior)
         {
-            NumeroDia = data.Day;
             Data = data;
 
             foreach (var transacao in transacoes)
@@ -22,6 +48,13 @@ namespace Neptune.Domain
             }
 
             Transacoes.Sort((x, y) => x.Data.CompareTo(y.Data));
+
+            SaldoDoDia = saldoUltimoDiaMesAnterior - Transacoes.Sum(x => x.Valor);
+        }
+
+        public void Atualizar(decimal saldoDiaAnterior)
+        {
+            _saldoDoDia = saldoDiaAnterior - _somaTransacoes;
         }
     }
 }
