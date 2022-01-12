@@ -40,12 +40,9 @@ namespace Neptune.Infra
             return _transacoes.FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<List<Transacao>> Obter(int ano, int mes, int[] contasId)
+        public async Task<List<Transacao>> Obter(int ano, int mes)
         {
-            return _transacoes
-                .Where(x => contasId.Contains(x.ContaId) && 
-                x.Data.Month == mes && 
-                x.Data.Year == ano).ToList();
+            return _transacoes.Where(x => x.Data.Month == mes && x.Data.Year == ano).ToList();
         }
 
         public Transacao Criar(Transacao transacao)

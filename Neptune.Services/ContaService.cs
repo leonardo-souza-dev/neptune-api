@@ -2,6 +2,7 @@
 using Neptune.Infra;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Neptune.Application
 {
@@ -14,9 +15,9 @@ namespace Neptune.Application
             _contaRepository = contaRepository;
         }
 
-        public List<Conta> ObterTodas()
+        public async Task<List<Conta>> ObterTodas()
         {
-            return _contaRepository.ObterTodas();
+            return await _contaRepository.ObterTodas();
         }
 
         public Conta Obter(int id)

@@ -24,11 +24,11 @@ namespace Neptune.Application
             return _transacaoRepository.ObterTodas();
         }
 
-        public async Task<Mes> ObterPorDataEContas(MesTransacao mesTransacao, int[] contasId)
+        public async Task<Mes> ObterMes(MesTransacao mesTransacao)
         {
-            var transacoes = await _transacaoRepository.Obter(mesTransacao.Ano, mesTransacao.Mes, contasId);
+            var transacoes = await _transacaoRepository.Obter(mesTransacao.Ano, mesTransacao.Mes);
             
-            var saldoUltimoDiaMesAnterior = await ObterSaldoUltimoDia(mesTransacao, contasId);
+            var saldoUltimoDiaMesAnterior = await ObterSaldoUltimoDia(mesTransacao);
 
             var mes = new Mes(mesTransacao, saldoUltimoDiaMesAnterior, transacoes);
 
@@ -45,11 +45,11 @@ namespace Neptune.Application
             return _transacaoRepository.Atualizar(transacao);
         }
 
-        private async Task<decimal> ObterSaldoUltimoDia(MesTransacao mesTransacao, int[] contasId)
+        private async Task<decimal> ObterSaldoUltimoDia(MesTransacao mesTransacao)
         {
             var mesAnterior = mesTransacao.ObterMesAnterior();
-            var transacoes = await _transacaoRepository.Obter(mesAnterior.Ano, mesAnterior.Mes, contasId);
-            var contas = await _contaRepository.Obter(contasId);
+            var transacoes = await _transacaoRepository.Obter(mesAnterior.Ano, mesAnterior.Mes);
+            var contas = await _contaRepository.ObterTodas();
             var saldoInicialContas = contas.Sum(x => x.SaldoInicial);
             var somaMes = transacoes.Sum(x => x.Valor);
 

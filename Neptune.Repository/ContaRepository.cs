@@ -16,7 +16,7 @@ namespace Neptune.Infra
             new Conta(2, "NuPoup", 1000M)
         };
 
-        public List<Conta> ObterTodas()
+        public async Task<List<Conta>> ObterTodas()
         {
             return Contas;
         }

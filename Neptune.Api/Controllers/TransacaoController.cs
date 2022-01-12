@@ -21,10 +21,10 @@ namespace Neptune.Api.Controllers
         }
 
 
-        [HttpGet("obter-por-data-contas")]
-        public IActionResult ObterPorDataEContas([FromQuery] int ano, int mes, int[] contasId)
+        [HttpGet("obter-mes")]
+        public IActionResult ObterMes([FromQuery] int ano, int mes)
         {
-            return Ok(_transacaoService.ObterPorDataEContas(new MesTransacao(ano, mes), contasId));
+            return Ok(_transacaoService.ObterMes(new MesTransacao(ano, mes)));
         }
 
         [HttpPost]

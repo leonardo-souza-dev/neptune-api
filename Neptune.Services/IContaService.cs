@@ -1,12 +1,13 @@
 ﻿using Neptune.Domain;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Neptune.Application
 {
     public interface IContaService
     {
-        List<Conta> ObterTodas();
+        Task<List<Conta>> ObterTodas();
         Conta Obter(int id);
     }
 }

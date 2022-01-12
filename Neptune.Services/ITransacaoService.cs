@@ -8,7 +8,7 @@ namespace Neptune.Application
     public interface ITransacaoService
     {
         List<Transacao> ObterTodas();
-        Task<Mes> ObterPorDataEContas(MesTransacao mesTransacao, int[] contasId);
+        Task<Mes> ObterMes(MesTransacao mesTransacao);
         Transacao Criar(Transacao transacao);
         Transacao Atualizar(Transacao transacao);
     }

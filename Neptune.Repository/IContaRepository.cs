@@ -6,7 +6,7 @@ namespace Neptune.Infra
 {
     public interface IContaRepository
     {
-        List<Conta> ObterTodas();
+        Task<List<Conta>> ObterTodas();
         Task<List<Conta>> Obter(int[] ids);
         Conta Obter(int id);
         Conta Criar(Conta conta);
